@@ -1,0 +1,21 @@
+function cs() { cd "$@" && ls; }
+
+alias y='yarn'
+alias ys='yarn start'
+alias yb='yarn build'
+alias ya='yarn add'
+alias ll='ls -la'
+alias la='ls -a'
+alias gs='git status'
+alias gl='git log --oneline -n 15'
+alias ga='git add'
+alias gco='git commit'
+alias gc='git checkout'
+alias gp='git push'
+alias gpu='git pull'
+alias gb='git branch'
+alias gm='git merge'
+alias gcp='git cherry-pick'
+alias g='git'
+
+alias o='open'
