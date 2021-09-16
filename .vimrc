@@ -43,6 +43,7 @@ let g:ale_fixers= {
   \   'css': ['prettier'],
   \   'json': ['prettier']
   \}
+let g:ale_completion_enabled = 1
 let b:ale_set_balloons=1
 let g:ale_open_list=0
 let g:ale_list_window_size=3

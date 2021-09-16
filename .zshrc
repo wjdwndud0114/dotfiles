@@ -39,52 +39,22 @@ export FZF_CTRL_T_COMMAND="rg --files --hidden --no-ignore-vcs -g '!{node_module
 alias f="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}' | fzf"
 alias vif='vim $(f)'
 
-### Added by Zinit's installer
-if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
-    print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
-    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
-        print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
-        print -P "%F{160}▓▒░ The clone has failed.%f%b"
-fi
+# Download Znap, if it's not there yet.
+[[ -f ~/Git/zsh-snap/znap.zsh ]] ||
+    git clone https://github.com/marlonrichert/zsh-snap.git ~/Git/zsh-snap
 
-source "$HOME/.zinit/bin/zinit.zsh"
-autoload -Uz _zinit
-(( ${+_comps} )) && _comps[zinit]=_zinit
+source ~/Git/zsh-snap/znap.zsh  # Start Znap
 
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zinit-zsh/z-a-rust \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node
+# `znap prompt` makes your prompt visible in less than 12ms!
+znap prompt sindresorhus/pure
 
-# Pure theme
-zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
+# `znap source` automatically downloads and installs your plugins.
+znap source marlonrichert/zsh-autocomplete
+znap source zdharma/fast-syntax-highlighting
+znap source zsh-users/zsh-completions
 
-### End of Zinit's installer chunk
-
-zinit lucid light-mode for \
-  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-    zdharma/fast-syntax-highlighting \
-    marlonrichert/zsh-autocomplete \
-  blockf \
-    zsh-users/zsh-completions \
-  pick"async.zsh" src"pure.zsh" \
-    sindresorhus/pure
-
-#zinit wait lucid light-mode for \
-# zinit light-mode for \
-#   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
-#   zdharma/fast-syntax-highlighting \
-#   marlonrichert/zsh-autocomplete \
-#   pick"async.zsh" src"pure.zsh" \
-#     sindresorhus/pure
-#   atpull'zinit creinstall -q'\
-#       zsh-users/zsh-completions
-
-autoload -U promptinit; promptinit
+# `znap eval` caches any kind of command output for you.
+znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
 
 # Add Visual Studio Code (code)
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"

@@ -10,6 +10,20 @@ ln -sf $DIR/.zalias ~/.zalias
 ln -sf $DIR/.zshrc ~/.zshrc
 
 echo "Installing packages..."
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install fzf
+$(brew --prefix)/opt/fzf/install
+brew install rg
+brew install vim
+brew install tmux
+
+echo "Setting up TERM with xterm-256color-italic"
+curl -L https://gist.githubusercontent.com/sos4nt/3187620/raw/bca247b4f86da6be4f60a69b9b380a11de804d1e/xterm-256color-italic.terminfo -o $DIR/xterm-256color-italic.terminfo
+tic $DIR/xterm-256color-italic.terminfo
+
+echo "Installing fonts"
+sh $DIR/fonts-master/install.sh
+
+echo "Import the iterm2 theme and set font to Roboto Mono for Powerline, 16"
 
 echo "Installation complete! Relogin please"
