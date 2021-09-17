@@ -31,14 +31,6 @@ setopt hist_ignore_all_dups     # Prevent history from recording duplicated entr
 setopt hist_ignore_space        # Prevent entries from being recorded by preceding them with space
 unsetopt beep nomatch
 
-# FZF
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPS="--extended"
-export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
-export FZF_CTRL_T_COMMAND="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}'"
-alias f="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}' | fzf"
-alias vif='vim $(f)'
-
 # Download Znap, if it's not there yet.
 [[ -f ~/Git/zsh-snap/znap.zsh ]] ||
     git clone https://github.com/marlonrichert/zsh-snap.git ~/Git/zsh-snap
@@ -52,6 +44,15 @@ znap prompt sindresorhus/pure
 znap source marlonrichert/zsh-autocomplete
 znap source zdharma/fast-syntax-highlighting
 znap source zsh-users/zsh-completions
+
+# FZF
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_OPS="--extended"
+export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
+export FZF_CTRL_T_COMMAND="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}'"
+alias f="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}' | fzf"
+alias vif='vim $(f)'
+bindkey '^[[A'  fzf-history-widget
 
 # `znap eval` caches any kind of command output for you.
 znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
