@@ -16,6 +16,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-dispatch'
 Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'vim-airline/vim-airline'
 Plug 'majutsushi/tagbar'
@@ -25,44 +26,51 @@ Plug 'sheerun/vim-polyglot'
 Plug 'dense-analysis/ale'
 Plug 'mhinz/vim-signify'
 Plug 'luochen1990/rainbow'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 " Ale
 let g:ale_linters = {
   \   'python': ['flake8', 'pylint'],
-  \   'javascript': ['eslint'],
-  \   'typescript': ['eslint'],
-  \   'typescriptreact': ['eslint'],
+  \   'javascript': ['eslint', 'tslint'],
+  \   'typescript': ['eslint', 'tslint'],
+  \   'typescriptreact': ['eslint', 'tslint'],
   \   'vue': ['eslint']
   \}
 let g:ale_fixers= {
-  \   'javascript': ['eslint', 'prettier'],
-  \   'typescript': ['eslint', 'prettier'],
-  \   'typescriptreact': ['eslint', 'prettier'],
+  \   'javascript': ['eslint', 'tslint', 'prettier'],
+  \   'typescript': ['eslint', 'tslint', 'prettier'],
+  \   'typescriptreact': ['eslint', 'tslint', 'prettier'],
   \   'css': ['prettier'],
   \   'json': ['prettier']
   \}
-let g:ale_completion_enabled = 1
-let g:ale_completion_autoimport = 1
 let b:ale_set_balloons=1
 let g:ale_open_list=0
 let g:ale_list_window_size=3
 let g:ale_lint_on_save=1
-let g:ale_lint_on_text_changed=1
-let g:ale_lint_delay=500
+let g:ale_lint_on_text_changed='never'
+let g:ale_lint_on_insert_leave=1
+let g:ale_lint_delay=300
 let g:ale_fix_on_save=1
 let g:ale_sign_error='❌'
 let g:ale_sign_warning='⚠️'
 let g:ale_javascript_prettier_use_local_config=1
 let g:airline#extensions#ale#enabled=1
+" let g:ale_completion_enabled = 1
+" let g:ale_completion_autoimport = 1
 hi link ALEErrorSign    Error
 hi link ALEWarningSign  Warning
 execute "set <M-a>=\ea"
+execute "set <S-F12>=\e[24~"
 map <M-a> :ALEToggle<CR>
-" map <F12> :ALEGoToDefinition
-nnoremap ]r :ALENext<CR>     " move to the next ALE warning / error
-nnoremap [r :ALEPrevious<CR> " move to the previous ALE warning / error
+nnoremap <silent> ]r :ALENext<CR>     " move to the next ALE warning / error
+nnoremap <silent> [r :ALEPrevious<CR> " move to the previous ALE warning / error
+" nnoremap <F12> :ALEGoToDefinition<CR>
+" nnoremap <leader><F12> :vsp<CR>:ALEGoToDefinition<CR>
+" nnoremap <leader><S-F12> :vsp<CR><C-w>T:ALEGoToDefinition<CR>
+" nnoremap K :ALEHover<CR>
+" nnoremap <silent> gr :ALEFindReferences<CR>
+" nnoremap <leader>rn :ALERename<CR>
 
 " fugitive
 nmap <leader>gb :G branch<space>
@@ -77,32 +85,38 @@ set updatetime=750
 
 " coc.nvim
 " Use tab for trigger completion with characters ahead and navigate.
-" inoremap <silent><expr> <TAB>
-"       \ pumvisible() ? "\<C-n>" :
-"       \ <SID>check_back_space() ? "\<TAB>" :
-"       \ coc#refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
 
-" inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
-" inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
+inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
+inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 " confirm choice with <CR>
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 "
 " GoTo code navigation.
 " nmap <silent> <F2> <Plug>(coc-rename)
-" nmap <silent> <F12> <Plug>(coc-definition)
-" nmap <silent> <leader><F12> :call CocAction('jumpDefinition', 'vsplit')<CR>
+nmap <silent> <F12> <Plug>(coc-definition)
+nmap <silent> <leader><F12> :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
+nmap <silent> <leader><S-F12> :call CocActionAsync('jumpDefinition', 'drop')<CR>
+nnoremap <silent> <leader>h :call CocActionAsync('doHover')<cr>
 " nmap <silent> <S-F12> <Plug>(coc-type-definition)
 " nmap <silent> <M-F12> <Plug>(coc-implementation)
-" nmap <silent> <M-S-F12> <Plug>(coc-references)
+nmap <silent> <leader>gr <Plug>(coc-references)
+" NEED :CocInstall coc-tsserver coc-json
+"   if error, need to downgrade tsserver to 4.2.4
+"   ~/.config/coc/extensions/node_modules/coc-tsserver -> open package.json,
+"   change version for tsserver, npm install
 
 " Symbol renaming.
-" nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>rn <Plug>(coc-rename)
 
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -121,7 +135,25 @@ let g:netrw_banner = 0
 let g:netrw_liststyle = 3
 let g:netrw_browse_split = 4
 let g:netrw_altv = 1
-let g:netrw_winsize = 25
+let g:netrw_winsize = 50
+function! ToggleNetrw()
+        let i = bufnr("$")
+        let wasOpen = 0
+        while (i >= 1)
+            if (getbufvar(i, "&filetype") == "netrw")
+                silent exe "bwipeout " . i
+                let wasOpen = 1
+            endif
+            let i-=1
+        endwhile
+    if !wasOpen
+        silent Vexplore
+    endif
+endfunction
+map <silent> <Leader>e :call ToggleNetrw()<CR>
+" map <silent> <Leader>e :Lexplore<CR>
+" Freed <C-l> in Netrw
+nmap <leader><leader>l <Plug>NetrwRefresh
 
 " Airline
 set laststatus=2
@@ -129,8 +161,7 @@ set noshowmode
 
 " FZF
 nnoremap <C-p> :GFiles<CR>
-nnoremap <Leader>h :History<CR>
-nnoremap <Leader>H :History:<CR>
+nnoremap <Leader>H :History<CR>
 set rtp+=/usr/local/opt/fzf
 
 if (has("termguicolors"))
@@ -169,10 +200,10 @@ inoremap {<CR> {<CR>}<C-c>O
 inoremap [<CR> [<CR>]<C-c>O
 
 "splits
-nnoremap <C-j> <C-W>j
-nnoremap <C-k> <C-W>k
-nnoremap <C-h> <C-W>h
-nnoremap <C-l> <C-W>l
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-h> <C-w>h
+nnoremap <C-l> <C-w>l
 set splitbelow
 set splitright
 
@@ -243,3 +274,7 @@ augroup END
 set ttimeoutlen=0 "remove delay
 
 filetype plugin indent on
+
+" DROPBOX DBX
+nnoremap <leader><leader>r :Dispatch! bzl itest-reload-current<CR>
+nnoremap <leader><leader><S-r> :Dispatch bzl itest-reload-current<CR>
