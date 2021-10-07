@@ -27,20 +27,22 @@ Plug 'dense-analysis/ale'
 Plug 'mhinz/vim-signify'
 Plug 'luochen1990/rainbow'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'puremourning/vimspector'
 call plug#end()
 
 " Ale
 let g:ale_linters = {
-  \   'python': ['flake8', 'pylint'],
-  \   'javascript': ['eslint', 'tslint'],
-  \   'typescript': ['eslint', 'tslint'],
-  \   'typescriptreact': ['eslint', 'tslint'],
+  \   'python': ['dbx-mypy'],
+  \   'javascript': ['eslint'],
+  \   'typescript': ['eslint'],
+  \   'typescriptreact': ['eslint'],
   \   'vue': ['eslint']
   \}
 let g:ale_fixers= {
-  \   'javascript': ['eslint', 'tslint', 'prettier'],
-  \   'typescript': ['eslint', 'tslint', 'prettier'],
-  \   'typescriptreact': ['eslint', 'tslint', 'prettier'],
+  \   'python': ['autopep8'],
+  \   'javascript': ['prettier'],
+  \   'typescript': ['prettier'],
+  \   'typescriptreact': ['prettier'],
   \   'css': ['prettier'],
   \   'json': ['prettier']
   \}
@@ -56,6 +58,7 @@ let g:ale_sign_error='❌'
 let g:ale_sign_warning='⚠️'
 let g:ale_javascript_prettier_use_local_config=1
 let g:airline#extensions#ale#enabled=1
+let g:ale_disable_lsp = 1
 " let g:ale_completion_enabled = 1
 " let g:ale_completion_autoimport = 1
 hi link ALEErrorSign    Error
@@ -81,7 +84,7 @@ nmap <leader>gpu :G pull<space>
 
 " signify
 nmap <silent> <F7> :SignifyToggle<CR>
-set updatetime=750
+set updatetime=300
 
 " coc.nvim
 " Use tab for trigger completion with characters ahead and navigate.
@@ -100,23 +103,36 @@ inoremap <expr> <C-j> pumvisible() ? "\<C-n>" : "\<C-j>"
 inoremap <expr> <C-k> pumvisible() ? "\<C-p>" : "\<C-k>"
 " confirm choice with <CR>
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-"
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
 " GoTo code navigation.
-" nmap <silent> <F2> <Plug>(coc-rename)
-nmap <silent> <F12> <Plug>(coc-definition)
-nmap <silent> <leader><F12> :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
-nmap <silent> <leader><S-F12> :call CocActionAsync('jumpDefinition', 'drop')<CR>
+nmap <leader>rn <Plug>(coc-rename)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> <leader>gd :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
+nmap <silent> <leader>gD :call CocActionAsync('jumpDefinition', 'drop')<CR>
 nnoremap <silent> <leader>h :call CocActionAsync('doHover')<cr>
 " nmap <silent> <S-F12> <Plug>(coc-type-definition)
 " nmap <silent> <M-F12> <Plug>(coc-implementation)
 nmap <silent> <leader>gr <Plug>(coc-references)
-" NEED :CocInstall coc-tsserver coc-json
+" NEED :CocInstall coc-tsserver coc-json coc-pyright
 "   if error, need to downgrade tsserver to 4.2.4
 "   ~/.config/coc/extensions/node_modules/coc-tsserver -> open package.json,
 "   change version for tsserver, npm install
-
-" Symbol renaming.
-nmap <leader>rn <Plug>(coc-rename)
+"
+" CocConfig
+" {
+"   \"tsserver.maxTsServerMemory\": 8192,
+"   \"diagnostic.displayByAle\": true
+" }
 
 " Tagbar
 nmap <F8> :TagbarToggle<CR>
@@ -155,6 +171,26 @@ map <silent> <Leader>e :call ToggleNetrw()<CR>
 " Freed <C-l> in Netrw
 nmap <leader><leader>l <Plug>NetrwRefresh
 
+" Custom function for zen mode :)
+let g:zen_mode = 0
+function! ToggleZenMode()
+  let g:zen_mode = !g:zen_mode
+  if g:zen_mode
+    silent wincmd |
+  else
+    silent wincmd =
+  endif
+endfunction
+map <silent> <Leader>z :call ToggleZenMode()<CR>
+
+function! ZenMode()
+  if g:zen_mode
+    wincmd |
+  endif
+endfunction
+au WinEnter * call ZenMode()
+set winminwidth=10
+
 " Airline
 set laststatus=2
 set noshowmode
@@ -171,16 +207,16 @@ if (has("termguicolors"))
 endif
 
 " gruvbox
-"let g:gruvbox_italic=1
-" let g:gruvbox_contrast_dark="medium" "soft/medium/hard
-" let g:gruvbox_contrast_light="medium"
-" let g:airline_theme='gruvbox'
-" colorscheme gruvbox
+let g:gruvbox_italic=1
+let g:gruvbox_contrast_dark="medium" "soft/medium/hard
+let g:gruvbox_contrast_light="medium"
+let g:airline_theme='gruvbox'
+colorscheme gruvbox
 
 " one
-let g:one_allow_italics=1
-let g:airline_theme='one'
-colorscheme one
+" let g:one_allow_italics=1
+" let g:airline_theme='one'
+" colorscheme one
 
 syntax on
 set background=dark
