@@ -8,6 +8,9 @@ ln -sf $DIR/.tmux.conf ~/.tmux.conf
 ln -sf $DIR/.zshenv ~/.zshenv
 ln -sf $DIR/.zalias ~/.zalias
 ln -sf $DIR/.zshrc ~/.zshrc
+for file in $DIR/.config/*; do
+  ln -sf $file ~/.config/
+done
 
 echo "Installing packages..."
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
