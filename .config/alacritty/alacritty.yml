@@ -1,0 +1,16 @@
+live_config_reload: true
+
+font:
+  size: 16.0
+  normal:
+    family: Roboto Mono for Powerline
+    style: Regular
+
+import:
+  - ~/.config/alacritty/dracula.yml
+
+scrolling:
+  history: 10000
+
+env:
+  TERM: xterm-256color-italic
