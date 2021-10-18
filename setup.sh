@@ -13,7 +13,13 @@ for file in $DIR/.config/*; do
 done
 
 echo "Installing packages..."
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+which -s brew
+if [[ $? != 0 ]] ; then
+    # Install Homebrew
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+else
+    brew update
+fi
 brew install fzf
 $(brew --prefix)/opt/fzf/install
 brew install rg
@@ -25,7 +31,8 @@ curl -L https://gist.githubusercontent.com/sos4nt/3187620/raw/bca247b4f86da6be4f
 tic $DIR/xterm-256color-italic.terminfo
 
 echo "Installing fonts"
-sh $DIR/fonts-master/install.sh
+brew tap homebrew/cask-fonts
+brew install font-roboto-mono-nerd-font
 
 echo "Import the iterm2 theme and set font to Roboto Mono for Powerline, 16"
 
