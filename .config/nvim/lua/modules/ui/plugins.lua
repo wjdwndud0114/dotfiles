@@ -6,9 +6,9 @@ ui['ellisonleao/gruvbox.nvim'] = {
   config = [[vim.cmd('colorscheme gruvbox')]],
 }
 
-ui['famiu/feline.nvim'] = {
-  config = conf.feline,
-  requires = 'kyazdani42/nvim-web-devicons',
+ui['hoob3rt/lualine.nvim'] = {
+  requires = {'kyazdani42/nvim-web-devicons', opt = true},
+  config = conf.lualine,
 }
 
 ui['lukas-reineke/indent-blankline.nvim'] = {

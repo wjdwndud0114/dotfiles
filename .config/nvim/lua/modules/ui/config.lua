@@ -1,7 +1,9 @@
 local config = {}
 
-function config.feline()
-  require('modules.ui.feline')
+function config.lualine()
+  require'lualine'.setup {
+    options = {theme = 'gruvbox'}
+  }
 end
 
 function config.indent_blankline()
