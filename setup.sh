@@ -25,6 +25,7 @@ $(brew --prefix)/opt/fzf/install
 brew install rg
 brew install vim
 brew install tmux
+brew install exa
 
 echo "Setting up TERM with xterm-256color-italic"
 curl -L https://gist.githubusercontent.com/sos4nt/3187620/raw/bca247b4f86da6be4f60a69b9b380a11de804d1e/xterm-256color-italic.terminfo -o $DIR/xterm-256color-italic.terminfo
@@ -33,7 +34,5 @@ tic $DIR/xterm-256color-italic.terminfo
 echo "Installing fonts"
 brew tap homebrew/cask-fonts
 brew install font-roboto-mono-nerd-font
-
-echo "Import the iterm2 theme and set font to Roboto Mono for Powerline, 16"
 
 echo "Installation complete! Relogin please"

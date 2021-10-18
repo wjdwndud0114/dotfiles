@@ -19,3 +19,4 @@ alias gcp='git cherry-pick'
 alias g='git'
 
 alias o='open'
+alias ls='exa'

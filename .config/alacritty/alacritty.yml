@@ -1,7 +1,11 @@
 live_config_reload: true
 
+window:
+  decorations: full
+
 font:
-  size: 16.0
+  use_thin_strokes: true
+  size: 15.5
   normal:
     family: RobotoMono Nerd Font
     style: Regular
@@ -11,6 +15,13 @@ import:
 
 scrolling:
   history: 10000
+
+selection:
+  semantic_escape_chars: ",│`|:\"' ()[]{}<>"
+  # When set to `true`, selected text will be copied to both the primary and
+  # the selection clipboard. Otherwise, it will only be copied to the selection
+  # clipboard.
+  save_to_clipboard: true
 
 env:
   TERM: xterm-256color-italic
