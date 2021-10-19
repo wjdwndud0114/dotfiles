@@ -35,7 +35,7 @@ local plug_map = {
     ["n|gt"]             = map_cmd("<cmd>lua vim.lsp.buf.type_definition()<CR>"):with_noremap():with_silent(),
     ["n|<Leader>cw"]     = map_cmd("<cmd>lua vim.lsp.buf.workspace_symbol()<CR>"):with_noremap():with_silent(),
     ["n|<Leader>ce"]     = map_cr('Lspsaga show_line_diagnostics'):with_noremap():with_silent(),
-    ["n|<Leader>ct"]      = map_args("Template"),
+    ["n|<Leader>ct"]     = map_args("Template"),
     ["n|<Leader>tf"]     = map_cu('DashboardNewFile'):with_noremap():with_silent(),
     -- Plugin nvim-tree
     -- ["n|<Leader>e"]      = map_cr('NvimTreeToggle'):with_noremap():with_silent(),
@@ -51,6 +51,11 @@ local plug_map = {
     -- Far.vim
     -- ["n|<Leader>fz"]     = map_cr('Farf'):with_noremap():with_silent();
     -- ["v|<Leader>fz"]     = map_cr('Farf'):with_noremap():with_silent();
+    -- Plugin Lua FZF
+    ["n|<C-p>"]             = map_cu('FzfLua git_files'):with_noremap():with_silent(),
+    ["n|<Leader><C-p>"]     = map_cu('FzfLua files'):with_noremap():with_silent(),
+    ["n|<Leader>h"]         = map_cu('FzfLua oldfiles'):with_noremap():with_silent(),
+    ["n|<Leader><Leader>s"] = map_cu('FzfLua grep_visual'):with_noremap():with_silent(),
     -- Plugin Telescope
     -- ["n|<Leader>bb"]     = map_cu('Telescope buffers'):with_noremap():with_silent(),
     -- ["n|<Leader>fa"]     = map_cu('DashboardFindWord'):with_noremap():with_silent(),
