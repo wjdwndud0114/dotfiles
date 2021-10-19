@@ -49,7 +49,7 @@ local enhance_attach = function(client,bufnr)
   api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 end
 
-local servers = vim.fn.stdpath('data')..global.path_sep..'lsp_servers'..global.path_sep
+local servers_root = vim.fn.stdpath('data')..global.path_sep..'lsp_servers'..global.path_sep
 
 -- lspconfig.gopls.setup {
 --   cmd = {"gopls","--remote=auto"},
@@ -61,28 +61,29 @@ local servers = vim.fn.stdpath('data')..global.path_sep..'lsp_servers'..global.p
 --   }
 -- }
 
--- lspconfig.sumneko_lua.setup {
---   cmd = {
---     global.home.."/workstation/lua-language-server/bin/macOS/lua-language-server",
---     "-E",
---     global.home.."/workstation/lua-language-server/main.lua"
---   };
---   settings = {
---     Lua = {
---       diagnostics = {
---         enable = true,
---         globals = {"vim","packer_plugins"}
---       },
---       runtime = {version = "LuaJIT"},
---       workspace = {
---         library = vim.list_extend({[vim.fn.expand("$VIMRUNTIME/lua")] = true},{}),
---       },
---     },
---   }
--- }
+local sumneko_root = servers_root..'sumneko_lua'..global.path_sep..'extension'..global.path_sep..'server'..global.path_sep
+lspconfig.sumneko_lua.setup {
+  cmd = {
+    sumneko_root..'bin'..global.path_sep..'Linux'..global.path_sep..'lua-language-server',
+    "-E",
+    sumneko_root..'main.lua'
+  };
+  settings = {
+    Lua = {
+      diagnostics = {
+        -- enable = true,
+        globals = {"vim","packer_plugins"}
+      },
+      runtime = {version = "LuaJIT"},
+      workspace = {
+        library = vim.list_extend({[vim.fn.expand("$VIMRUNTIME/lua")] = true},{}),
+      },
+    },
+  }
+}
 
 lspconfig.tsserver.setup {
-  cmd = { servers..'tsserver'..global.path_sep..'node_modules'..global.path_sep..'typescript-language-server'..global.path_sep..'lib'..global.path_sep..'cli.js', '--stdio' },
+  cmd = { servers_root..'tsserver'..global.path_sep..'node_modules'..global.path_sep..'typescript-language-server'..global.path_sep..'lib'..global.path_sep..'cli.js', '--stdio' },
   on_attach = function(client)
     client.resolved_capabilities.document_formatting = false
     enhance_attach(client)
