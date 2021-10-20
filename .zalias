@@ -1,5 +1,3 @@
-function cs() { cd "$@" && ls; }
-
 alias y='yarn'
 alias ys='yarn start'
 alias yb='yarn build'
@@ -20,3 +18,5 @@ alias g='git'
 
 alias o='open'
 alias ls='exa'
+
+function cs() { cd "$@" && ls; }

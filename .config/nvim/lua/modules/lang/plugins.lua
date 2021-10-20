@@ -8,11 +8,11 @@ lang['nvim-treesitter/nvim-treesitter'] = {
 }
 
 lang['nvim-treesitter/nvim-treesitter-refactor'] = {
-  after = 'nvim-treesitter'
+  after = 'nvim-treesitter',
 }
 
 lang['nvim-treesitter/nvim-treesitter-textobjects'] = {
-  after = 'nvim-treesitter'
+  after = 'nvim-treesitter',
 }
 
 return lang

@@ -39,7 +39,7 @@ function autocmd.load_autocmds()
       -- Equalize window dimensions when resizing vim window
       {"VimResized", "*", [[tabdo wincmd =]]};
       -- Force write shada on leaving nvim
-      -- {"VimLeave", "*", [[if has('nvim') | wshada! | else | wviminfo! | endif]]};
+      {"VimLeave", "*", [[if has('nvim') | wshada! | else | wviminfo! | endif]]};
       -- Check if file changed when its window is focus, more eager than 'autoread'
       {"FocusGained", "* checktime"};
     };
