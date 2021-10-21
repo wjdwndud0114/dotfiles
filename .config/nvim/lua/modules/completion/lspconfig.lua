@@ -113,7 +113,7 @@ lspconfig.tsserver.setup {
       eslint_opts = {},
 
       -- formatting
-      enable_formatting = true,
+      enable_formatting = false,
       formatter = "prettier",
       formatter_opts = {},
 

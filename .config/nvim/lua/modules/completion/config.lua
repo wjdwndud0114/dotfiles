@@ -40,6 +40,7 @@ end
 
 function config.null_ls()
   local null_ls = require('null-ls')
+
   null_ls.config({
     sources = {
       -- Python
@@ -48,7 +49,12 @@ function config.null_ls()
       null_ls.builtins.diagnostics.flake8,
 
       -- JS yaml html markdown
-      null_ls.builtins.formatting.prettier,
+      null_ls.builtins.formatting.prettier.with({
+        command = "node_modules/.bin/prettier",
+        condition = function(utils)
+          return utils.root_has_file(local_prettier)
+        end,
+      }),
 
       -- C/C++
       -- Formatting is handled by clangd language server
