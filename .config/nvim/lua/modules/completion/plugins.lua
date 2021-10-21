@@ -21,4 +21,10 @@ completion['hrsh7th/nvim-cmp'] = {
   requires = {{'hrsh7th/cmp-buffer', opt=true}, {'hrsh7th/cmp-nvim-lsp', opt=true}, {'neovim/nvim-lspconfig', opt=true}}
 }
 
+completion['jose-elias-alvarez/null-ls.nvim'] = {
+  event = 'BufReadPost',
+  config = conf.null_ls,
+  requires = {{"neovim/nvim-lspconfig", opt=true}, {"nvim-lua/plenary.nvim", opt=true }},
+}
+
 return completion

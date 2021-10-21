@@ -27,6 +27,7 @@ editor['tpope/vim-commentary'] = {}
 editor['tpope/vim-fugitive'] = {}
 
 editor['lewis6991/gitsigns.nvim'] = {
+  event = 'BufReadPre',
   config = conf.gitsigns,
   requires = {'nvim-lua/plenary.nvim', opt=true},
   -- tag = 'release' -- To use the latest release
