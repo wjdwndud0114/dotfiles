@@ -66,8 +66,8 @@ hi link ALEWarningSign  Warning
 execute "set <M-a>=\ea"
 execute "set <S-F12>=\e[24~"
 map <M-a> :ALEToggle<CR>
-nnoremap <silent> ]r :ALENext<CR>     " move to the next ALE warning / error
-nnoremap <silent> [r :ALEPrevious<CR> " move to the previous ALE warning / error
+nnoremap <silent> ]e :ALENext<CR>     " move to the next ALE warning / error
+nnoremap <silent> [e :ALEPrevious<CR> " move to the previous ALE warning / error
 " nnoremap <F12> :ALEGoToDefinition<CR>
 " nnoremap <leader><F12> :vsp<CR>:ALEGoToDefinition<CR>
 " nnoremap <leader><S-F12> :vsp<CR><C-w>T:ALEGoToDefinition<CR>
@@ -119,7 +119,7 @@ nmap <leader>rn <Plug>(coc-rename)
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> <leader>gd :call CocActionAsync('jumpDefinition', 'vsplit')<CR>
 nmap <silent> <leader>gD :call CocActionAsync('jumpDefinition', 'drop')<CR>
-nnoremap <silent> <leader>h :call CocActionAsync('doHover')<cr>
+nnoremap <silent> K :call CocActionAsync('doHover')<cr>
 " nmap <silent> <S-F12> <Plug>(coc-type-definition)
 " nmap <silent> <M-F12> <Plug>(coc-implementation)
 nmap <silent> <leader>gr <Plug>(coc-references)
