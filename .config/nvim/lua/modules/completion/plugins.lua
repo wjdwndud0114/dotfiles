@@ -13,7 +13,6 @@ completion['williamboman/nvim-lsp-installer'] = {
 
 completion['tami5/lspsaga.nvim'] = {
   cmd = 'Lspsaga',
-  branch = 'nvim51',
 }
 
 completion['L3MON4D3/LuaSnip'] = {}

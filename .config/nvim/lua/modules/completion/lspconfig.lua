@@ -80,7 +80,7 @@ lspconfig.sumneko_lua.setup {
       },
     },
   },
-  capabilities = capabilities
+  capabilities = capabilities,
 }
 
 lspconfig.tsserver.setup {
@@ -89,13 +89,22 @@ lspconfig.tsserver.setup {
     -- disable tsserver format, but have autocmd for null-ls
     client.resolved_capabilities.document_formatting = false
     client.resolved_capabilities.document_range_formatting = false
-    format.lsp_before_save()
+    -- format.lsp_before_save()
     enhance_attach(client)
   end,
   flags = {
     debounce_text_changes = 150,
   },
-  capabilities = capabilities
+  capabilities = capabilities,
+}
+
+lspconfig.pyright.setup {
+  cmd = {
+    servers_root..'python'..global.path_sep..'node_modules'..global.path_sep..'.bin'..global.path_sep..'pyright-langserver',
+    '--stdio'
+  },
+  on_attach = enhance_attach,
+  capabilities = capabilities,
 }
 
 -- lspconfig.clangd.setup {
@@ -115,7 +124,6 @@ lspconfig.tsserver.setup {
 local servers = {
   -- 'dockerls',
   'bashls',
-  'pyright',
 }
 
 for _,server in ipairs(servers) do
