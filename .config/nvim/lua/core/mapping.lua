@@ -35,7 +35,6 @@ local def_map = {
     ["i|<C-k>"]      = map_cmd('<Esc>O'):with_noremap(),
     ["i|<C-s>"]      = map_cmd('<Esc>:w<CR>'),
     ["i|<C-q>"]      = map_cmd('<Esc>:wq<CR>'),
-    ["i|<C-e>"]      = map_cmd([[pumvisible() ? "\<C-e>" : "\<End>"]]):with_noremap():with_expr(),
   -- command line
     ["c|<C-b>"]      = map_cmd('<Left>'):with_noremap(),
     ["c|<C-f>"]      = map_cmd('<Right>'):with_noremap(),
