@@ -70,4 +70,4 @@ export PATH="$HOME/.tfenv/bin:$PATH"
 export PATH="$HOME/.tgenv/bin:$PATH"
 
 # Increase node memory
-export NODE_OPTIONS=“--max-old-space-size=4096”
+export NODE_OPTIONS="--max-old-space-size=4096"

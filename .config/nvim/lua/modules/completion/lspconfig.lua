@@ -1,6 +1,7 @@
 local api = vim.api
 local lspconfig = require 'lspconfig'
 local global = require 'core.global'
+local format = require 'modules/completion/format'
 
 if not packer_plugins['lspsaga.nvim'].loaded then
   vim.cmd [[packadd lspsaga.nvim]]
@@ -11,7 +12,7 @@ saga.init_lsp_saga({
   code_action_icon = '💡'
 })
 
-local capabilities = vim.lsp.protocol.make_client_capabilities()
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 function _G.reload_lsp()
@@ -42,6 +43,9 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
 })
 
 local enhance_attach = function(client,bufnr)
+  if client.resolved_capabilities.document_formatting then
+    format.lsp_before_save()
+  end
   api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 end
 
@@ -63,7 +67,7 @@ lspconfig.sumneko_lua.setup {
     sumneko_root..'bin'..global.path_sep..(global.is_mac and 'macOS' or 'Linux')..global.path_sep..'lua-language-server',
     "-E",
     sumneko_root..'main.lua'
-  };
+  },
   settings = {
     Lua = {
       diagnostics = {
@@ -75,19 +79,23 @@ lspconfig.sumneko_lua.setup {
         library = vim.list_extend({[vim.fn.expand("$VIMRUNTIME/lua")] = true},{}),
       },
     },
-  }
+  },
+  capabilities = capabilities
 }
 
 lspconfig.tsserver.setup {
   cmd = { servers_root..'tsserver'..global.path_sep..'node_modules'..global.path_sep..'typescript-language-server'..global.path_sep..'lib'..global.path_sep..'cli.js', '--stdio' },
   on_attach = function(client, bufnr)
+    -- disable tsserver format, but have autocmd for null-ls
     client.resolved_capabilities.document_formatting = false
     client.resolved_capabilities.document_range_formatting = false
+    format.lsp_before_save()
     enhance_attach(client)
   end,
   flags = {
     debounce_text_changes = 150,
   },
+  capabilities = capabilities
 }
 
 -- lspconfig.clangd.setup {
@@ -112,6 +120,7 @@ local servers = {
 
 for _,server in ipairs(servers) do
   lspconfig[server].setup {
-    on_attach = enhance_attach
+    on_attach = enhance_attach,
+    capabilities = capabilities
   }
 end
