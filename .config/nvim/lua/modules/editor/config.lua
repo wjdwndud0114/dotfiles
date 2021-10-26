@@ -61,4 +61,8 @@ function config.gitsigns()
   }
 end
 
+function config.auto_session()
+  require('auto-session').setup()
+end
+
 return config

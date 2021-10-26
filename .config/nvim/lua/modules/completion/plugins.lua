@@ -4,7 +4,6 @@ local conf = require('modules.completion.config')
 completion['neovim/nvim-lspconfig'] = {
   event = 'BufReadPre',
   config = conf.nvim_lsp,
-  requires = {'jose-elias-alvarez/nvim-lsp-ts-utils', opt=true},
 }
 
 completion['williamboman/nvim-lsp-installer'] = {
@@ -12,8 +11,9 @@ completion['williamboman/nvim-lsp-installer'] = {
   config = conf.nvim_lsp_installer,
 }
 
-completion['glepnir/lspsaga.nvim'] = {
+completion['tami5/lspsaga.nvim'] = {
   cmd = 'Lspsaga',
+  branch = 'nvim51',
 }
 
 completion['hrsh7th/nvim-cmp'] = {

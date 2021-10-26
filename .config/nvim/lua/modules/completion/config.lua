@@ -49,12 +49,13 @@ function config.null_ls()
       null_ls.builtins.diagnostics.flake8,
 
       -- JS yaml html markdown
-      null_ls.builtins.formatting.prettier.with({
-        command = "node_modules/.bin/prettier",
-        condition = function(utils)
-          return utils.root_has_file(local_prettier)
-        end,
+      null_ls.builtins.formatting.prettierd.with({
+        command = "node_modules/.bin/prettierd"
       }),
+      null_ls.builtins.formatting.eslint_d.with({
+        command = "node_modules/.bin/eslint_d"
+      }),
+      null_ls.builtins.code_actions.gitsigns,
 
       -- C/C++
       -- Formatting is handled by clangd language server
@@ -74,14 +75,7 @@ function config.null_ls()
       -- }),
     },
   })
-  require('lspconfig')['null-ls'].setup {
-    on_attach = function (client,bufnr)
-      if client.resolved_capabilities.document_formatting then
-        require('modules.completion.format').lsp_before_save()
-      end
-      vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-    end
-  }
+  require('lspconfig')['null-ls'].setup {}
 end
 
 return config
