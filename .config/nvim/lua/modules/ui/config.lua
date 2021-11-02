@@ -2,7 +2,15 @@ local config = {}
 
 function config.lualine()
   require'lualine'.setup {
-    options = {theme = 'gruvbox'}
+    options = {theme = 'gruvbox'},
+    sections = {
+      lualine_b = {'diff', {'diagnostics', sources={'nvim_lsp', 'coc'}}},
+      lualine_c = {
+        'filename',
+        function() return #vim.lsp.buf_get_clients() and require'lsp-status'.status() or '' end
+      },
+      lualine_y = {},
+    },
   }
 end
 

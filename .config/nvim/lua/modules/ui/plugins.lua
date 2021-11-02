@@ -7,7 +7,10 @@ ui['ellisonleao/gruvbox.nvim'] = {
 }
 
 ui['hoob3rt/lualine.nvim'] = {
-  requires = {'kyazdani42/nvim-web-devicons', opt = true},
+  requires = {
+    {'kyazdani42/nvim-web-devicons', opt = true},
+    {'nvim-lua/lsp-status.nvim'},
+  },
   config = conf.lualine,
 }
 
