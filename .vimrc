@@ -82,6 +82,19 @@ nmap <leader>gc :G checkout<space>
 nmap <leader>gp :G push<space>
 nmap <leader>gpu :G pull<space>
 
+" vimspector
+let g:vimspector_enable_mappings = 'HUMAN'
+let g:vimspector_install_gadgets = ['python']
+nmap <Leader>dc <Plug>VimspectorContinue
+nmap <Leader>ds <Plug>VimspectorStop
+nmap <Leader>dt <Plug>VimspectorToggleBreakpoint
+nmap <Leader>do <Plug>VimspectorStepOver
+nmap <Leader>di <Plug>VimspectorStepInto
+nmap <Leader>dO <Plug>VimspectorStepOut
+nmap <Leader><Leader>dt <Plug>VimspectorToggleConditionalBreakpoint
+nmap <Leader>di <Plug>VimspectorBalloonEval
+xmap <Leader>di <Plug>VimspectorBalloonEval
+
 " signify
 nmap <silent> <F7> :SignifyToggle<CR>
 set updatetime=300
