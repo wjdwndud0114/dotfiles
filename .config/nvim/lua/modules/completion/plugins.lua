@@ -27,14 +27,14 @@ completion['hrsh7th/nvim-cmp'] = {
   requires = {
     {'hrsh7th/cmp-buffer', after='nvim-cmp'},
     {'hrsh7th/cmp-nvim-lsp', after='nvim-cmp'},
-    {'saadparwaiz1/cmp_luasnip', after = 'LuaSnip'},
+    {'saadparwaiz1/cmp_luasnip', after='nvim-cmp', opt=true},
   }
 }
 
 completion['jose-elias-alvarez/null-ls.nvim'] = {
   event = 'BufReadPost',
   config = conf.null_ls,
-  requires = {{"neovim/nvim-lspconfig", opt=true}, {"nvim-lua/plenary.nvim", opt=true }},
+  requires = {{"nvim-lua/plenary.nvim", opt=true }},
 }
 
 return completion

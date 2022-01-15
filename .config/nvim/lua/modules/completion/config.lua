@@ -47,7 +47,7 @@ end
 function config.null_ls()
   local null_ls = require('null-ls')
 
-  null_ls.config({
+  null_ls.setup({
     sources = {
       -- Python
       -- null_ls.builtins.formatting.autopep8,
@@ -81,7 +81,6 @@ function config.null_ls()
       -- }),
     },
   })
-  require('lspconfig')['null-ls'].setup {}
 end
 
 return config

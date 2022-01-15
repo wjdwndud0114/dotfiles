@@ -51,7 +51,7 @@ local enhance_attach = function(client,bufnr)
   if client.resolved_capabilities.document_formatting then
     format.lsp_before_save()
   end
-  api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+  api.nvim_buf_set_option(0, "omnifunc", "v:lua.vim.lsp.omnifunc")
 end
 
 local servers_root = vim.fn.stdpath('data')..global.path_sep..'lsp_servers'..global.path_sep
@@ -94,7 +94,7 @@ lspconfig.tsserver.setup {
     -- disable tsserver format, but have autocmd for null-ls
     client.resolved_capabilities.document_formatting = false
     client.resolved_capabilities.document_range_formatting = false
-    -- format.lsp_before_save()
+    format.lsp_before_save()
     enhance_attach(client)
   end,
   flags = {
