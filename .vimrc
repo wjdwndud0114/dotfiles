@@ -17,7 +17,6 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dispatch'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'vim-airline/vim-airline'
 Plug 'majutsushi/tagbar'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -32,14 +31,14 @@ call plug#end()
 
 " Ale
 let g:ale_linters = {
-  \   'python': ['dbx-mypy'],
+  \   'python': ['dbx-mypy', 'pyright'],
   \   'javascript': ['eslint'],
   \   'typescript': ['eslint'],
   \   'typescriptreact': ['eslint'],
   \   'vue': ['eslint']
   \}
 let g:ale_fixers= {
-  \   'python': ['autopep8'],
+  \   'python': ['black'],
   \   'javascript': ['prettier'],
   \   'typescript': ['prettier'],
   \   'typescriptreact': ['prettier'],
@@ -326,5 +325,5 @@ set ttimeoutlen=0 "remove delay
 filetype plugin indent on
 
 " DROPBOX DBX
-nnoremap <leader><leader>r :Dispatch! bzl itest-reload-current<CR>
-nnoremap <leader><leader><S-r> :Dispatch bzl itest-reload-current<CR>
+nnoremap <leader><leader>r :Dispatch! rc<CR>
+nnoremap <leader><leader><S-r> :Dispatch mbzl itest-reload-current<CR>
