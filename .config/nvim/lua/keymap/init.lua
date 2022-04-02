@@ -29,6 +29,7 @@ local plug_map = {
     ["v|ga"]             = map_cu("Lspsaga range_code_action"):with_noremap():with_silent(),
     ["n|gd"]             = map_cr('Lspsaga preview_definition'):with_noremap():with_silent(),
     ["n|gD"]             = map_cmd("<cmd>lua vim.lsp.buf.definition()<CR>"):with_noremap():with_silent(),
+    ["n|<leader>gd"]     = map_cmd("<cmd>vsp<CR><cmd>lua vim.lsp.buf.definition()<CR>"):with_noremap():with_silent(),
     ["n|gi"]             = map_cmd("<cmd>lua vim.lsp.buf.implementation()<CR>"):with_noremap():with_silent(),
     ["n|gs"]             = map_cr('Lspsaga signature_help'):with_noremap():with_silent(),
     ["n|gr"]             = map_cr('Lspsaga rename'):with_noremap():with_silent(),
@@ -56,7 +57,7 @@ local plug_map = {
     ["n|<C-p>"]             = map_cu('FzfLua git_files'):with_noremap():with_silent(),
     ["n|<Leader><C-p>"]     = map_cu('FzfLua files'):with_noremap():with_silent(),
     ["n|<Leader>h"]         = map_cu('FzfLua oldfiles'):with_noremap():with_silent(),
-    ["n|<Leader><Leader>s"] = map_cu('FzfLua grep_visual'):with_noremap():with_silent(),
+    ["n|<Leader><Leader>s"] = map_cu('FzfLua grep'):with_noremap():with_silent(),
     -- Plugin Telescope
     -- ["n|<Leader>bb"]     = map_cu('Telescope buffers'):with_noremap():with_silent(),
     -- ["n|<Leader>fa"]     = map_cu('DashboardFindWord'):with_noremap():with_silent(),
