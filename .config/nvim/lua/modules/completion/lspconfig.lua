@@ -69,7 +69,7 @@ local servers_root = vim.fn.stdpath('data')..global.path_sep..'lsp_servers'..glo
 local sumneko_root = servers_root..'sumneko_lua'..global.path_sep..'extension'..global.path_sep..'server'..global.path_sep
 lspconfig.sumneko_lua.setup {
   cmd = {
-    sumneko_root..'bin'..global.path_sep..(global.is_mac and 'macOS' or 'Linux')..global.path_sep..'lua-language-server',
+    sumneko_root..'bin'..global.path_sep..'lua-language-server',
     "-E",
     sumneko_root..'main.lua'
   },
