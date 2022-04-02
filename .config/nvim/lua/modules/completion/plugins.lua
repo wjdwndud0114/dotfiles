@@ -4,9 +4,6 @@ local conf = require('modules.completion.config')
 completion['neovim/nvim-lspconfig'] = {
   after = 'cmp-nvim-lsp',
   config = conf.nvim_lsp,
-  requires = {
-    {'nvim-lua/lsp-status.nvim'},
-  },
 }
 
 completion['williamboman/nvim-lsp-installer'] = {

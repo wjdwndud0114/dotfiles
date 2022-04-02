@@ -2,9 +2,6 @@ local api = vim.api
 local lspconfig = require 'lspconfig'
 local global = require 'core.global'
 local format = require 'modules/completion/format'
-local lsp_status = require 'lsp-status'
-
-lsp_status.register_progress()
 
 if not packer_plugins['lspsaga.nvim'].loaded then
   vim.cmd [[packadd lspsaga.nvim]]
@@ -17,7 +14,6 @@ saga.init_lsp_saga({
 
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
-capabilities = vim.tbl_extend('keep', capabilities, lsp_status.capabilities)
 
 function _G.reload_lsp()
   vim.lsp.stop_client(vim.lsp.get_active_clients())
@@ -47,7 +43,6 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
 })
 
 local enhance_attach = function(client,bufnr)
-  lsp_status.on_attach(client)
   if client.resolved_capabilities.document_formatting then
     format.lsp_before_save()
   end

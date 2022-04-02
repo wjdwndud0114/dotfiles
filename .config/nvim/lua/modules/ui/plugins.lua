@@ -9,9 +9,12 @@ ui['ellisonleao/gruvbox.nvim'] = {
 ui['hoob3rt/lualine.nvim'] = {
   requires = {
     {'kyazdani42/nvim-web-devicons', opt = true},
-    {'nvim-lua/lsp-status.nvim'},
   },
   config = conf.lualine,
+}
+
+ui['j-hui/fidget.nvim'] = {
+  config = conf.fidget
 }
 
 ui['lukas-reineke/indent-blankline.nvim'] = {
