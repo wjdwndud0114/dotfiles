@@ -62,14 +62,14 @@ function config.null_ls()
       null_ls.builtins.diagnostics.eslint_d.with({
         command = "node_modules/.bin/eslint_d"
       }),
-      null_ls.builtins.code_actions.gitsigns,
+      -- null_ls.builtins.code_actions.gitsigns,
 
       -- C/C++
       -- Formatting is handled by clangd language server
       -- null_ls.builtins.formatting.clang_format,
 
       -- Markdown
-      null_ls.builtins.diagnostics.markdownlint,
+      -- null_ls.builtins.diagnostics.markdownlint,
 
       -- Lua
       -- cargo install stylua

@@ -121,9 +121,17 @@ lspconfig.pyright.setup {
 --   capabilities = capabilities,
 -- }
 
+lspconfig.bashls.setup {
+  cmd = {
+    servers_root..'bash'..global.path_sep..'node_modules'..global.path_sep..'bash-language-server'..global.path_sep..'bin'..global.path_sep..'main.js'
+  },
+  on_attach = enhance_attach,
+  capabilities = capabilities
+}
+
 local servers = {
   -- 'dockerls',
-  'bashls',
+  -- 'bashls',
 }
 
 for _,server in ipairs(servers) do
