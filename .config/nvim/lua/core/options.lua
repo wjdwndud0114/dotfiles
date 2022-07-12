@@ -16,7 +16,7 @@ local function load_options()
     mouse          = "nv";
     errorbells     = true;
     visualbell     = true;
-    hidden         = true;
+    hidden         = false;
     fileformats    = "unix,mac,dos";
     magic          = true;
     virtualedit    = "block";

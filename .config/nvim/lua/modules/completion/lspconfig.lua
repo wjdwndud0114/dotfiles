@@ -43,8 +43,8 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
 })
 
 local enhance_attach = function(client,bufnr)
-  if client.resolved_capabilities.document_formatting then
-    format.lsp_before_save()
+  if client.supports_method("textDocument/formatting") then
+    format.lsp_before_save(bufnr)
   end
   api.nvim_buf_set_option(0, "omnifunc", "v:lua.vim.lsp.omnifunc")
 end
@@ -86,10 +86,8 @@ lspconfig.sumneko_lua.setup {
 lspconfig.tsserver.setup {
   cmd = { servers_root..'tsserver'..global.path_sep..'node_modules'..global.path_sep..'typescript-language-server'..global.path_sep..'lib'..global.path_sep..'cli.js', '--stdio' },
   on_attach = function(client, bufnr)
-    -- disable tsserver format, but have autocmd for null-ls
-    client.resolved_capabilities.document_formatting = false
-    client.resolved_capabilities.document_range_formatting = false
-    format.lsp_before_save()
+    -- use null-ls & eslint_d for formatting
+    client.server_capabilities.documentFormattingProvider = false
     enhance_attach(client)
   end,
   flags = {
