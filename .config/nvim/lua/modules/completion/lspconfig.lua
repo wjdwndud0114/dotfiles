@@ -88,7 +88,7 @@ lspconfig.tsserver.setup {
   on_attach = function(client, bufnr)
     -- use null-ls & eslint_d for formatting
     client.server_capabilities.documentFormattingProvider = false
-    enhance_attach(client)
+    enhance_attach(client, bufnr)
   end,
   flags = {
     debounce_text_changes = 150,
