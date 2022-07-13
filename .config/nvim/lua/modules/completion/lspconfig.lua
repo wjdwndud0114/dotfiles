@@ -1,6 +1,7 @@
 local lspconfig = require 'lspconfig'
 local global = require 'core.global'
-local enhance_attach = require('modules.completion.config').enhance_attach
+
+local enhance_attach = require('modules/completion/format').enhance_attach
 
 if not packer_plugins['lspsaga.nvim'].loaded then
   vim.cmd [[packadd lspsaga.nvim]]

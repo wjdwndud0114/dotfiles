@@ -1,14 +1,4 @@
 local config = {}
-local format = require 'modules/completion/format'
-
-local function enhance_attach(client, bufnr)
-  if client.supports_method("textDocument/formatting") then
-    format.lsp_before_save(bufnr)
-  end
-  vim.api.nvim_buf_set_option(0, "omnifunc", "v:lua.vim.lsp.omnifunc")
-end
-
-config.enhance_attach = enhance_attach
 
 function config.nvim_lsp()
   require('modules.completion.lspconfig')
@@ -59,7 +49,7 @@ function config.null_ls()
   local null_ls = require('null-ls')
 
   null_ls.setup({
-    on_attach = enhance_attach,
+    on_attach = require('modules/completion/format').enhance_attach,
     sources = {
       -- Python
       -- null_ls.builtins.formatting.autopep8,

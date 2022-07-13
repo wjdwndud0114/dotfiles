@@ -28,9 +28,6 @@ function autocmd.load_autocmds()
       {"BufWritePre","MERGE_MSG","setlocal noundofile"};
       {"BufWritePre","*.tmp","setlocal noundofile"};
       {"BufWritePre","*.bak","setlocal noundofile"};
-      {"BufWritePre","*.tsx","lua vim.lsp.buf.formatting()"};
-      {"BufWritePre","*.lua","lua vim.lsp.buf.formatting()"};
-      {"BufWritePre","*.go","lua require('internal.golines').golines_format()"};
     };
 
     wins = {
