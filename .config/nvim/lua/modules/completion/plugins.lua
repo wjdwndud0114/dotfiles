@@ -7,7 +7,7 @@ completion['neovim/nvim-lspconfig'] = {
 }
 
 completion['williamboman/nvim-lsp-installer'] = {
-  cmd = {'LspInstallInfo', 'LspInstall', 'LspUninstall', 'LspUninstallAll', 'LspInstallLog', 'LspPrintInstalled'},
+  cmd = { 'LspInstallInfo', 'LspInstall', 'LspUninstall', 'LspUninstallAll', 'LspInstallLog', 'LspPrintInstalled' },
   config = conf.nvim_lsp_installer,
 }
 
@@ -22,16 +22,16 @@ completion['hrsh7th/nvim-cmp'] = {
   -- event = 'InsertEnter',
   config = conf.nvim_cmp,
   requires = {
-    {'hrsh7th/cmp-buffer', after='nvim-cmp'},
-    {'hrsh7th/cmp-nvim-lsp', after='nvim-cmp'},
-    {'saadparwaiz1/cmp_luasnip', after='nvim-cmp', opt=true},
+    { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' },
+    { 'hrsh7th/cmp-nvim-lsp', after = 'nvim-cmp' },
+    { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp', opt = true },
   }
 }
 
 completion['jose-elias-alvarez/null-ls.nvim'] = {
   event = 'BufReadPost',
   config = conf.null_ls,
-  requires = {{"nvim-lua/plenary.nvim", opt=true }},
+  requires = { { "nvim-lua/plenary.nvim", opt = true } },
 }
 
 return completion

@@ -1,22 +1,32 @@
 local config = {}
+local format = require 'modules/completion/format'
+
+local function enhance_attach(client, bufnr)
+  if client.supports_method("textDocument/formatting") then
+    format.lsp_before_save(bufnr)
+  end
+  vim.api.nvim_buf_set_option(0, "omnifunc", "v:lua.vim.lsp.omnifunc")
+end
+
+config.enhance_attach = enhance_attach
 
 function config.nvim_lsp()
   require('modules.completion.lspconfig')
 end
 
 function config.nvim_lsp_installer()
-  require'nvim-lsp-installer'.on_server_ready(
-  function(server)
-    local opts = {}
-    -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
-    server:setup(opts)
-    vim.cmd [[ do User LspAttachBuffers ]]
-  end
+  require 'nvim-lsp-installer'.on_server_ready(
+    function(server)
+      local opts = {}
+      -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
+      server:setup(opts)
+      vim.cmd [[ do User LspAttachBuffers ]]
+    end
   )
 end
 
 function config.nvim_cmp()
-  local cmp = require'cmp'
+  local cmp = require 'cmp'
   cmp.setup({
     -- snippet = {
     --   expand = function(args)
@@ -49,6 +59,7 @@ function config.null_ls()
   local null_ls = require('null-ls')
 
   null_ls.setup({
+    on_attach = enhance_attach,
     sources = {
       -- Python
       -- null_ls.builtins.formatting.autopep8,
