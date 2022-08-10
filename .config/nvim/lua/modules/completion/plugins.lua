@@ -11,7 +11,7 @@ completion['williamboman/nvim-lsp-installer'] = {
   config = conf.nvim_lsp_installer,
 }
 
-completion['tami5/lspsaga.nvim'] = {
+completion['glepnir/lspsaga.nvim'] = {
   cmd = 'Lspsaga',
 }
 
