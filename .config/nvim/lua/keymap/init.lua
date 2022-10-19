@@ -92,6 +92,18 @@ local plug_map = {
     -- ["n|F"]              = map_cmd("v:lua.enhance_ft_move('F')"):with_expr(),
     -- ["x|F"]              = map_cmd("v:lua.enhance_ft_move('F')"):with_expr(),
     -- ["o|F"]              = map_cmd("v:lua.enhance_ft_move('F')"):with_expr(),
+    -- Plugin vimspector
+    ["n|<leader>dd"]             = map_cr("call vimspector#Launch()"):with_noremap():with_silent(),
+    ["n|<leader>dr"]             = map_cr("VimspectorReset"):with_noremap():with_silent(),
+    ["n|<leader>dc"]             = map_cmd("<Plug>VimspectorContinue"):with_noremap():with_silent(),
+    ["n|<leader>dC"]             = map_cmd("<Plug>VimspectorRunToCursor"):with_noremap():with_silent(),
+    ["n|<leader>ds"]             = map_cmd("<Plug>VimspectorStop"):with_noremap():with_silent(),
+    ["n|<leader>dt"]             = map_cmd("<Plug>VimspectorToggleBreakpoint"):with_noremap():with_silent(),
+    ["n|<leader>do"]             = map_cmd("<Plug>VimspectorStepOver"):with_noremap():with_silent(),
+    ["n|<leader>di"]             = map_cmd("<Plug>VimspectorStepInto"):with_noremap():with_silent(),
+    ["n|<leader>dO"]             = map_cmd("<Plug>VimspectorStepOut"):with_noremap():with_silent(),
+    ["n|<leader><leader>dt"]             = map_cmd("<Plug>VimspectorToggleConditionalBreakpoint"):with_noremap():with_silent(),
+    ["n|<leader>de"]             = map_cmd("<Plug>VimspectorBalloonEval"):with_noremap():with_silent(),
 }
 
 bind.nvim_load_mapping(plug_map)

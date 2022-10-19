@@ -18,7 +18,7 @@ function config.nvim_colorizer()
   }
 end
 
-function config.vim_cursorwod()
+function config.vim_cursorword()
   vim.api.nvim_command('augroup user_plugin_cursorword')
   vim.api.nvim_command('autocmd!')
   vim.api.nvim_command('autocmd FileType NvimTree,lspsagafinder,dashboard,vista let b:cursorword = 0')

@@ -3,7 +3,7 @@ local conf = require('modules.editor.config')
 
 editor['itchyny/vim-cursorword'] = {
   event = {'BufReadPre','BufNewFile'},
-  config = conf.vim_cursorwod
+  config = conf.vim_cursorword
 }
 
 editor['norcalli/nvim-colorizer.lua'] = {
