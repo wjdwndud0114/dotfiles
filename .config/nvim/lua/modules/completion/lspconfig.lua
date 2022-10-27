@@ -111,6 +111,17 @@ lspconfig.pyright.setup {
   root_dir = require('lspconfig/util').root_pattern("pyrightconfig.json", ".git", "pyproject.toml", "requirements.txt"),
   on_attach = enhance_attach,
   capabilities = capabilities,
+  settings = {
+    python = {
+      analysis = {
+        typeCheckingMode = "off",
+        autoSearchPaths = true,
+        useLibraryCodeForTypes = true,
+        diagnosticMode = "openFilesOnly",
+        autoImportCompletions = true,
+      }
+    }
+  }
 }
 
 -- lspconfig.clangd.setup {

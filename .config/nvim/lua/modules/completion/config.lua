@@ -56,6 +56,26 @@ function config.null_ls()
       -- null_ls.builtins.diagnostics.flake8,
 
       -- JS yaml html markdown
+      null_ls.builtins.formatting.black,
+      null_ls.builtins.diagnostics.mypy.with {
+        method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
+        command = "mypy-run",
+        args = function(params)
+          return {
+            params.bufname,
+            "--hide-error-codes",
+            "--hide-error-context",
+            "--no-color-output",
+            "--show-column-numbers",
+            "--show-error-codes",
+            "--no-error-summary",
+            "--no-pretty",
+            "--shadow-file",
+            params.bufname,
+            params.temp_path,
+          }
+        end
+      },
       null_ls.builtins.formatting.prettierd,
       null_ls.builtins.diagnostics.eslint_d,
       -- null_ls.builtins.code_actions.gitsigns,
