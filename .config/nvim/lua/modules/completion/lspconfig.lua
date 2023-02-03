@@ -116,7 +116,7 @@ lspconfig.pyright.setup {
       analysis = {
         typeCheckingMode = "off",
         autoSearchPaths = true,
-        useLibraryCodeForTypes = true,
+        useLibraryCodeForTypes = false,
         diagnosticMode = "openFilesOnly",
         autoImportCompletions = true,
       }
