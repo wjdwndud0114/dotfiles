@@ -6,9 +6,14 @@ completion['neovim/nvim-lspconfig'] = {
   config = conf.nvim_lsp,
 }
 
-completion['williamboman/nvim-lsp-installer'] = {
-  cmd = { 'LspInstallInfo', 'LspInstall', 'LspUninstall', 'LspUninstallAll', 'LspInstallLog', 'LspPrintInstalled' },
-  config = conf.nvim_lsp_installer,
+completion['williamboman/mason.nvim'] = {
+  cmd = {'LspInstall', 'LspUninstall', 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog'},
+  config = conf.mason_nvim,
+}
+
+completion['williamboman/mason-lspconfig.nvim'] = {
+  after = 'mason.nvim',
+  cmd = {'LspInstall', 'LspUninstall', 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog'},
 }
 
 completion['glepnir/lspsaga.nvim'] = {

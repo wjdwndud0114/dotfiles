@@ -4,15 +4,11 @@ function config.nvim_lsp()
   require('modules.completion.lspconfig')
 end
 
-function config.nvim_lsp_installer()
-  require 'nvim-lsp-installer'.on_server_ready(
-    function(server)
-      local opts = {}
-      -- This setup() function is exactly the same as lspconfig's setup function (:help lspconfig-quickstart)
-      server:setup(opts)
-      vim.cmd [[ do User LspAttachBuffers ]]
-    end
-  )
+function config.mason_nvim()
+  require('mason').setup()
+  require("mason-lspconfig").setup({
+    ensure_installed = { "bashls", "pyright", "tsserver", "lua_ls" }
+  })
 end
 
 function config.nvim_cmp()
@@ -27,7 +23,7 @@ function config.nvim_cmp()
       ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), { 'i', 'c' }),
       ["<C-k>"] = cmp.mapping.select_prev_item(),
       ["<C-j>"] = cmp.mapping.select_next_item(),
-      ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-d>'] = cmp.mapping.scroll_docs( -4),
       ['<C-u>'] = cmp.mapping.scroll_docs(4),
       ['<C-e>'] = cmp.mapping.close(),
       ['<CR>'] = cmp.mapping.confirm({ select = true }),

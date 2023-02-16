@@ -42,7 +42,7 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   update_in_insert = false,
 })
 
-local servers_root = vim.fn.stdpath('data') .. global.path_sep .. 'lsp_servers' .. global.path_sep
+local servers_root = vim.fn.stdpath('data') .. global.path_sep .. 'mason' .. global.path_sep
 
 -- lspconfig.gopls.setup {
 --   cmd = {"gopls","--remote=auto"},
@@ -54,13 +54,9 @@ local servers_root = vim.fn.stdpath('data') .. global.path_sep .. 'lsp_servers' 
 --   }
 -- }
 
-local sumneko_root = servers_root ..
-    'sumneko_lua' .. global.path_sep .. 'extension' .. global.path_sep .. 'server' .. global.path_sep
-lspconfig.sumneko_lua.setup {
+lspconfig.lua_ls.setup {
   cmd = {
-    sumneko_root .. 'bin' .. global.path_sep .. 'lua-language-server',
-    "-E",
-    sumneko_root .. 'main.lua'
+    servers_root .. 'bin' .. global.path_sep .. 'lua-language-server',
   },
   settings = {
     Lua = {
@@ -81,15 +77,17 @@ lspconfig.sumneko_lua.setup {
       },
     },
   },
+  on_attach = function(client, bufnr)
+    enhance_attach(client, bufnr)
+  end,
   capabilities = capabilities,
 }
 
 lspconfig.tsserver.setup {
   cmd = { servers_root ..
-      'tsserver' ..
-      global.path_sep ..
-      'node_modules' .. global.path_sep ..
-      'typescript-language-server' .. global.path_sep .. 'lib' .. global.path_sep .. 'cli.js', '--stdio' },
+  'bin' ..
+  global.path_sep ..
+  'typescript-language-server', '--stdio' },
   on_attach = function(client, bufnr)
     -- use null-ls & eslint_d for formatting
     client.server_capabilities.documentFormattingProvider = false
@@ -104,8 +102,8 @@ lspconfig.tsserver.setup {
 lspconfig.pyright.setup {
   cmd = {
     servers_root ..
-        'python' .. global.path_sep .. 'node_modules' .. global.path_sep .. '.bin' ..
-        global.path_sep .. 'pyright-langserver',
+    'bin' ..
+    global.path_sep .. 'pyright-langserver',
     '--stdio'
   },
   on_attach = enhance_attach,
@@ -129,10 +127,7 @@ lspconfig.pyright.setup {
 lspconfig.bashls.setup {
   cmd = {
     servers_root ..
-        'bash' ..
-        global.path_sep ..
-        'node_modules' .. global.path_sep .. 'bash-language-server' .. global.path_sep ..
-        'bin' .. global.path_sep .. 'main.js'
+    'bin' .. global.path_sep .. 'bash-language-server'
   },
   on_attach = enhance_attach,
   capabilities = capabilities
