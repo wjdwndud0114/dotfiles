@@ -23,7 +23,7 @@ fi
 brew install fzf
 $(brew --prefix)/opt/fzf/install
 brew install rg
-brew install vim
+brew install nvim
 brew install tmux
 brew install exa
 brew install git-delta

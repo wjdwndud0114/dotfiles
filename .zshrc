@@ -1,7 +1,7 @@
 export CACHEDIR="$HOME/.local/share"
 [[ -d "$CACHEDIR" ]] || mkdir -p "$CACHEDIR"
 
-export EDITOR=$(which vim)
+export EDITOR=$(which nvim)
 
 # Smart URLs.
 autoload -Uz url-quote-magic
