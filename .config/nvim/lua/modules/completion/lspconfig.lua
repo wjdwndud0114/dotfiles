@@ -7,8 +7,7 @@ if not packer_plugins['lspsaga.nvim'].loaded then
   vim.cmd [[packadd lspsaga.nvim]]
 end
 
-local saga = require 'lspsaga'
-saga.init_lsp_saga({
+require('lspsaga').setup({
   code_action_icon = '💡'
 })
 
