@@ -7,13 +7,14 @@ completion['neovim/nvim-lspconfig'] = {
 }
 
 completion['williamboman/mason.nvim'] = {
-  cmd = {'LspInstall', 'LspUninstall', 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog'},
+  cmd = { 'LspInstall', 'LspUninstall', 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog' },
   config = conf.mason_nvim,
 }
 
 completion['williamboman/mason-lspconfig.nvim'] = {
   after = 'mason.nvim',
-  cmd = {'LspInstall', 'LspUninstall', 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog'},
+  cmd = { 'LspInstall', 'LspUninstall', 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog' },
+  config = conf.mason_lspconfig,
 }
 
 completion['glepnir/lspsaga.nvim'] = {
@@ -27,8 +28,8 @@ completion['hrsh7th/nvim-cmp'] = {
   -- event = 'InsertEnter',
   config = conf.nvim_cmp,
   requires = {
-    { 'hrsh7th/cmp-buffer', after = 'nvim-cmp' },
-    { 'hrsh7th/cmp-nvim-lsp', after = 'nvim-cmp' },
+    { 'hrsh7th/cmp-buffer',       after = 'nvim-cmp' },
+    { 'hrsh7th/cmp-nvim-lsp',     after = 'nvim-cmp' },
     { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp', opt = true },
   }
 }

@@ -6,6 +6,9 @@ end
 
 function config.mason_nvim()
   require('mason').setup()
+end
+
+function config.mason_lspconfig()
   require("mason-lspconfig").setup({
     ensure_installed = { "bashls", "pyright", "tsserver", "lua_ls" }
   })
