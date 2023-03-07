@@ -327,3 +327,4 @@ filetype plugin indent on
 " DROPBOX DBX
 nnoremap <leader><leader>r :Dispatch! rc<CR>
 nnoremap <leader><leader><S-r> :Dispatch mbzl itest-reload-current<CR>
+nnoremap <leader>sg :silent exec '!open https://sourcegraph.pp.dropbox.com/server/-/blob/%\?L' . line(".")<CR>
