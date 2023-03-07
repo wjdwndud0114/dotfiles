@@ -42,7 +42,7 @@ znap prompt sindresorhus/pure
 
 # `znap source` automatically downloads and installs your plugins.
 znap source marlonrichert/zsh-autocomplete
-znap source zdharma/fast-syntax-highlighting
+znap source zdharma-continuum/fast-syntax-highlighting
 znap source zsh-users/zsh-completions
 
 # FZF
