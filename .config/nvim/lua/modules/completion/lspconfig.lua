@@ -29,17 +29,17 @@ vim.cmd('command! -nargs=0 LspRestart call v:lua.reload_lsp()')
 
 vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
   vim.lsp.diagnostic.on_publish_diagnostics, {
-  -- Enable underline, use default values
-  underline = true,
-  -- Enable virtual text, override spacing to 4
-  virtual_text = true,
-  signs = {
-    enable = true,
-    priority = 20
-  },
-  -- Disable a feature
-  update_in_insert = false,
-})
+    -- Enable underline, use default values
+    underline = true,
+    -- Enable virtual text, override spacing to 4
+    virtual_text = true,
+    signs = {
+      enable = true,
+      priority = 20
+    },
+    -- Disable a feature
+    update_in_insert = false,
+  })
 
 local servers_root = vim.fn.stdpath('data') .. global.path_sep .. 'mason' .. global.path_sep
 
@@ -105,6 +105,7 @@ lspconfig.pyright.setup {
     global.path_sep .. 'pyright-langserver',
     '--stdio'
   },
+  root_dir = require('lspconfig/util').root_pattern("pyrightconfig.json", ".git", "pyproject.toml", "requirements.txt"),
   on_attach = enhance_attach,
   capabilities = capabilities,
 }
