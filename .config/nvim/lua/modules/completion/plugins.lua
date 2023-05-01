@@ -1,6 +1,8 @@
 local completion = {}
 local conf = require('modules.completion.config')
 
+completion['github/copilot.vim'] = {}
+
 completion['neovim/nvim-lspconfig'] = {
   after = 'cmp-nvim-lsp',
   config = conf.nvim_lsp,
@@ -37,7 +39,7 @@ completion['hrsh7th/nvim-cmp'] = {
 completion['jose-elias-alvarez/null-ls.nvim'] = {
   event = 'BufReadPost',
   config = conf.null_ls,
-  requires = { { "nvim-lua/plenary.nvim", opt = true } },
+  requires = { { "nvim-lua/plenary.nvim" } },
 }
 
 return completion
