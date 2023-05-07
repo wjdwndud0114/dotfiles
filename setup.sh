@@ -8,6 +8,7 @@ ln -sf $DIR/.tmux.conf ~/.tmux.conf
 ln -sf $DIR/.zshenv ~/.zshenv
 ln -sf $DIR/.zalias ~/.zalias
 ln -sf $DIR/.zshrc ~/.zshrc
+mkdir -p ~/.config
 for file in $DIR/.config/*; do
   ln -sf $file ~/.config/
 done
@@ -17,9 +18,11 @@ which -s brew
 if [[ $? != 0 ]] ; then
     # Install Homebrew
     /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-else
-    brew update
 fi
+
+# Restart shell to have the brew install/update
+# exec "$SHELL"
+
 brew install fzf
 $(brew --prefix)/opt/fzf/install
 brew install rg
@@ -42,6 +45,7 @@ tic $DIR/xterm-256color-italic.terminfo
 echo "Installing fonts"
 brew tap homebrew/cask-fonts
 brew install font-roboto-mono-nerd-font
+defaults write -g AppleFontSmoothing -int 0
 
 echo "Installation complete! Relogin please"
 echo "Merge .gitconfig file for git-delta!"

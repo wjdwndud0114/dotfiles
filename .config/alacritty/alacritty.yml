@@ -4,7 +4,6 @@ window:
   decorations: full
 
 font:
-  use_thin_strokes: true
   size: 15.5
   normal:
     family: RobotoMono Nerd Font

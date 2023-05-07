@@ -45,6 +45,9 @@ znap source marlonrichert/zsh-autocomplete
 znap source zdharma-continuum/fast-syntax-highlighting
 znap source zsh-users/zsh-completions
 
+# brew
+eval $(/opt/homebrew/bin/brew shellenv)
+
 # FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPS="--extended"
