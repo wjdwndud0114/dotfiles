@@ -38,6 +38,8 @@ git config --global delta.navigate true
 git config --global merge.conflictstyle diff3
 git config --global diff.colorMoved default
 
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+
 echo "Setting up TERM with xterm-256color-italic"
 curl -L https://gist.githubusercontent.com/sos4nt/3187620/raw/bca247b4f86da6be4f60a69b9b380a11de804d1e/xterm-256color-italic.terminfo -o $DIR/xterm-256color-italic.terminfo
 tic $DIR/xterm-256color-italic.terminfo
