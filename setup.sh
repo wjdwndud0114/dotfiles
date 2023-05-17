@@ -30,6 +30,7 @@ brew install nvim
 brew install tmux
 brew install exa
 brew install git-delta
+brew install lvav
 
 # config for git-delta
 git config --global core.pager "delta"
