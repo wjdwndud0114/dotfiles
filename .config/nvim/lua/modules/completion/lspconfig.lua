@@ -68,7 +68,10 @@ lspconfig.lua_ls.setup {
       },
       diagnostics = {
         -- enable = true,
-        globals = { "vim", "packer_plugins" }
+        globals = { "vim", "packer_plugins" },
+        neededFileStatus = {
+          ["codestyle-check"] = "Any"
+        }
       },
       runtime = { version = "LuaJIT" },
       workspace = {

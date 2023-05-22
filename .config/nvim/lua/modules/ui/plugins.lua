@@ -2,13 +2,13 @@ local ui = {}
 local conf = require('modules.ui.config')
 
 ui['ellisonleao/gruvbox.nvim'] = {
-  requires = {"rktjmp/lush.nvim"},
+  requires = { "rktjmp/lush.nvim" },
   config = [[vim.cmd('colorscheme gruvbox')]],
 }
 
 ui['hoob3rt/lualine.nvim'] = {
   requires = {
-    {'kyazdani42/nvim-web-devicons', opt = true},
+    { 'kyazdani42/nvim-web-devicons', opt = true },
   },
   config = conf.lualine,
 }

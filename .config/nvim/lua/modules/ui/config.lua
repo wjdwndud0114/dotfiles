@@ -1,18 +1,18 @@
 local config = {}
 
 function config.lualine()
-  require'lualine'.setup {
-    options = {theme = 'gruvbox'},
+  require 'lualine'.setup {
+    options = { theme = 'gruvbox' },
     sections = {
-      lualine_b = {'diff', {'diagnostics', sources={'nvim_lsp', 'coc'}}},
-     lualine_c = {'filename'},
+      lualine_b = { 'diff', { 'diagnostics', sources = { 'nvim_lsp', 'coc' } } },
+      lualine_c = { 'filename' },
       lualine_y = {},
     },
   }
 end
 
 function config.fidget()
-  require'fidget'.setup {}
+  require 'fidget'.setup {}
 end
 
 function config.indent_blankline()
@@ -41,7 +41,7 @@ function config.indent_blankline()
     "flutterToolsOutline",
     "" -- for all buffers without a file type
   }
-  vim.g.indent_blankline_buftype_exclude = {"terminal", "nofile"}
+  vim.g.indent_blankline_buftype_exclude = { "terminal", "nofile" }
   vim.g.indent_blankline_show_trailing_blankline_indent = false
   vim.g.indent_blankline_show_current_context = true
   vim.g.indent_blankline_context_patterns = {

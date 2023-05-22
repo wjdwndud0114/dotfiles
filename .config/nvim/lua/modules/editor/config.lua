@@ -2,18 +2,18 @@ local config = {}
 
 function config.nvim_colorizer()
   require 'colorizer'.setup {
-    css = { rgb_fn = true; };
-    scss = { rgb_fn = true; };
-    sass = { rgb_fn = true; };
-    stylus = { rgb_fn = true; };
-    vim = { names = true; };
-    tmux = { names = false; };
-    'javascript';
-    'javascriptreact';
-    'typescript';
-    'typescriptreact';
+    css = { rgb_fn = true, },
+    scss = { rgb_fn = true, },
+    sass = { rgb_fn = true, },
+    stylus = { rgb_fn = true, },
+    vim = { names = true, },
+    tmux = { names = false, },
+    'javascript',
+    'javascriptreact',
+    'typescript',
+    'typescriptreact',
     html = {
-      mode = 'foreground';
+      mode = 'foreground',
     }
   }
 end
@@ -29,24 +29,24 @@ function config.vim_cursorword()
 end
 
 function config.gitsigns()
-   if not packer_plugins['plenary.nvim'].loaded then
+  if not packer_plugins['plenary.nvim'].loaded then
     vim.cmd [[packadd plenary.nvim]]
   end
   require('gitsigns').setup {
     signs = {
-      add = {hl = 'GitGutterAdd', text = '▋'},
-      change = {hl = 'GitGutterChange',text= '▋'},
-      delete = {hl= 'GitGutterDelete', text = '▋'},
-      topdelete = {hl ='GitGutterDeleteChange',text = '▔'},
-      changedelete = {hl = 'GitGutterChange', text = '▎'},
+      add = { hl = 'GitGutterAdd', text = '▋' },
+      change = { hl = 'GitGutterChange', text = '▋' },
+      delete = { hl = 'GitGutterDelete', text = '▋' },
+      topdelete = { hl = 'GitGutterDeleteChange', text = '▔' },
+      changedelete = { hl = 'GitGutterChange', text = '▎' },
     },
     keymaps = {
       -- Default keymap options
       noremap = true,
       buffer = true,
 
-      ['n ]g'] = { expr = true, "&diff ? ']g' : '<cmd>lua require\"gitsigns\".next_hunk()<CR>'"},
-      ['n [g'] = { expr = true, "&diff ? '[g' : '<cmd>lua require\"gitsigns\".prev_hunk()<CR>'"},
+      ['n ]g'] = { expr = true, "&diff ? ']g' : '<cmd>lua require\"gitsigns\".next_hunk()<CR>'" },
+      ['n [g'] = { expr = true, "&diff ? '[g' : '<cmd>lua require\"gitsigns\".prev_hunk()<CR>'" },
 
       ['n <leader>hs'] = '<cmd>lua require"gitsigns".stage_hunk()<CR>',
       ['n <leader>hu'] = '<cmd>lua require"gitsigns".undo_stage_hunk()<CR>',
@@ -54,7 +54,7 @@ function config.gitsigns()
       ['n <leader>hp'] = '<cmd>lua require"gitsigns".preview_hunk()<CR>',
       ['n <leader>hb'] = '<cmd>lua require"gitsigns".blame_line()<CR>',
 
-     -- Text objects
+      -- Text objects
       ['o ih'] = ':<C-U>lua require"gitsigns".text_object()<CR>',
       ['x ih'] = ':<C-U>lua require"gitsigns".text_object()<CR>'
     },
