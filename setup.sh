@@ -32,6 +32,12 @@ brew install exa
 brew install git-delta
 brew install lvav
 
+# tmux plugins
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tmux-sensible ~/.tmux/plugins/tmux-sensible
+git clone https://github.com/odedlaz/tmux-onedark-theme ~/.tmux/plugins/tmux-onedark-theme
+git clone https://github.com/ofirgall/tmux-window-name ~/.tmux/plugins/tmux-window-name
+
 # config for git-delta
 git config --global core.pager "delta"
 git config --global interactive.diffFilter "delta --color-only"
