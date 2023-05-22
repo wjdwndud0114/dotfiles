@@ -37,6 +37,8 @@ git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 git clone https://github.com/tmux-plugins/tmux-sensible ~/.tmux/plugins/tmux-sensible
 git clone https://github.com/odedlaz/tmux-onedark-theme ~/.tmux/plugins/tmux-onedark-theme
 git clone https://github.com/ofirgall/tmux-window-name ~/.tmux/plugins/tmux-window-name
+python3 -m pip install --user libtmux dataclasses
+python3 -m pip install dataclasses --user
 
 # config for git-delta
 git config --global core.pager "delta"
