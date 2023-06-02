@@ -61,7 +61,7 @@ function config.null_ls()
         method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
         command = "mypy-daemon",
         args = function(params)
-          return {}
+          return { "-s" }
         end
       },
       null_ls.builtins.formatting.prettierd,

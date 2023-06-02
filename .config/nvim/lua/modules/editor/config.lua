@@ -28,6 +28,10 @@ function config.vim_cursorword()
   vim.api.nvim_command('augroup END')
 end
 
+function config.fzf_lua()
+  require('fzf-lua').setup({ 'max-perf' })
+end
+
 function config.gitsigns()
   if not packer_plugins['plenary.nvim'].loaded then
     vim.cmd [[packadd plenary.nvim]]
