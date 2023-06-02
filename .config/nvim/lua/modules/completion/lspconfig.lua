@@ -7,9 +7,19 @@ if not packer_plugins['lspsaga.nvim'].loaded then
   vim.cmd [[packadd lspsaga.nvim]]
 end
 
-require('lspsaga').setup({
-  code_action_icon = '💡'
-})
+require('lspsaga').setup({})
+
+-- configure signs icons
+local signs = {
+  DiagnosticSignError = " ",
+  DiagnosticSignWarn = " ",
+  DiagnosticSignHint = " ",
+  DiagnosticSignInfo = " ",
+}
+
+for hl, icon in pairs(signs) do
+  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+end
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
@@ -99,6 +109,12 @@ lspconfig.tsserver.setup {
     debounce_text_changes = 150,
   },
   capabilities = capabilities,
+  init_options = {
+    hostInfo = "neovim",
+    preferences = {
+      importModuleSpecifierPreference = "non-relative",
+    },
+  },
 }
 
 lspconfig.pyright.setup {
