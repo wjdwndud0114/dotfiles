@@ -139,9 +139,13 @@ lspconfig.pyright.setup {
 --   },
 -- }
 
--- lspconfig.rust_analyzer.setup {
---   capabilities = capabilities,
--- }
+lspconfig.rust_analyzer.setup {
+  capabilities = capabilities,
+  cmd = {
+    servers_root ..
+    'bin' .. global.path_sep .. 'rust-analyzer'
+  },
+}
 
 lspconfig.bashls.setup {
   cmd = {

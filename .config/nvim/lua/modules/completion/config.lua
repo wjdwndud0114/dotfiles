@@ -10,7 +10,7 @@ end
 
 function config.mason_lspconfig()
   require("mason-lspconfig").setup({
-    ensure_installed = { "bashls", "pyright", "tsserver", "lua_ls" }
+    ensure_installed = { "bashls", "pyright", "tsserver", "lua_ls", "rust_analyzer" }
   })
 end
 
