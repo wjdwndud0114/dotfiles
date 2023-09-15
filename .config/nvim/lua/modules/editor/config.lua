@@ -55,8 +55,6 @@ function config.fzf_lua()
     fzf.fzf_live(
       'rg --column --line-number --no-heading --color=always --smart-case -- <query> | ~/.dotfiles/file-web-devicon', {
         actions = fzf.defaults.actions.files,
-        color_icons = true,
-        file_icons = true,
         prompt = 'Rg> ',
         fzf_opts = {
           ['--nth'] = 2,
@@ -70,8 +68,6 @@ function config.fzf_lua()
     fzf.fzf_live(
       'rg --column --line-number --no-heading --color=always --smart-case -- <query> | ~/.dotfiles/file-web-devicon', {
         actions = fzf.defaults.actions.files,
-        color_icons = true,
-        file_icons = true,
         cwd = vim.api.nvim_eval("expand('%:p:~:.:h')"),
         prompt = vim.api.nvim_eval("expand('%:p:~:.:h')") .. ' Rg> ',
         fzf_opts = {
