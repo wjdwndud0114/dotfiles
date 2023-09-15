@@ -28,6 +28,61 @@ function config.vim_cursorword()
   vim.api.nvim_command('augroup END')
 end
 
+function config.fzf_lua()
+  -- https://github.com/ibhagwan/fzf-lua/wiki/Advanced#fzf-exec-api
+  -- speed up icon: https://github.com/MaartenStaa/file-web-devicons
+  local fzf = require('fzf-lua')
+
+  vim.keymap.set('n', '<C-p>', function()
+    fzf.fzf_exec('fd -H -I --type f --strip-cwd-prefix | ~/.dotfiles/file-web-devicon', {
+      actions = fzf.defaults.actions.files,
+      fzf_opts = { ['--nth'] = 2, ['--delimiter'] = fzf.utils.nbsp },
+      previewer = 'builtin',
+    })
+  end, { noremap = true })
+
+  vim.keymap.set('n', '<leader><C-p>', function()
+    fzf.fzf_exec('fd -H -I --type f --strip-cwd-prefix | ~/.dotfiles/file-web-devicon', {
+      actions = fzf.defaults.actions.files,
+      cwd = vim.api.nvim_eval("expand('%:p:~:.:h')"),
+      prompt = vim.api.nvim_eval("expand('%:p:~:.:h')") .. '> ',
+      fzf_opts = { ['--nth'] = 2, ['--delimiter'] = fzf.utils.nbsp },
+      previewer = 'builtin',
+    })
+  end, { noremap = true })
+
+  vim.keymap.set('n', '<leader>s', function()
+    fzf.fzf_live(
+      'rg --column --line-number --no-heading --color=always --smart-case -- <query> | ~/.dotfiles/file-web-devicon', {
+        actions = fzf.defaults.actions.files,
+        color_icons = true,
+        file_icons = true,
+        prompt = 'Rg> ',
+        fzf_opts = {
+          ['--nth'] = 2,
+          ['--delimiter'] = fzf.utils.nbsp
+        },
+        previewer = 'builtin',
+      })
+  end, { noremap = true })
+
+  vim.keymap.set('n', '<leader><leader>s', function()
+    fzf.fzf_live(
+      'rg --column --line-number --no-heading --color=always --smart-case -- <query> | ~/.dotfiles/file-web-devicon', {
+        actions = fzf.defaults.actions.files,
+        color_icons = true,
+        file_icons = true,
+        cwd = vim.api.nvim_eval("expand('%:p:~:.:h')"),
+        prompt = vim.api.nvim_eval("expand('%:p:~:.:h')") .. ' Rg> ',
+        fzf_opts = {
+          ['--nth'] = 2,
+          ['--delimiter'] = fzf.utils.nbsp
+        },
+        previewer = 'builtin',
+      })
+  end, { noremap = true })
+end
+
 function config.gitsigns()
   if not packer_plugins['plenary.nvim'].loaded then
     vim.cmd [[packadd plenary.nvim]]

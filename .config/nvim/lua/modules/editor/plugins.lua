@@ -15,7 +15,8 @@ editor['ibhagwan/fzf-lua'] = {
   requires = {
     'vijaymarupudi/nvim-fzf',
     'kyazdani42/nvim-web-devicons' -- optional for icons
-  }
+  },
+  config = conf.fzf_lua
 }
 
 editor['tpope/vim-surround'] = {}

@@ -1,7 +1,8 @@
 local fn, uv, api = vim.fn, vim.loop, vim.api
-local vim_path = require('core.global').vim_path
-local data_dir = require('core.global').data_dir
-local modules_dir = vim_path .. '/lua/modules'
+local g = require('core.global')
+local vim_path = g.vim_path
+local data_dir = g.data_dir
+local modules_dir = g.modules_dir
 local packer_compiled = data_dir .. 'packer_compiled.vim'
 local compile_to_lua = data_dir .. 'lua/_compiled.lua'
 local packer = nil
@@ -110,16 +111,22 @@ function plugins.convert_compile_file()
 end
 
 function plugins.magic_compile()
+  for k, _ in pairs(package.loaded) do
+    if k:match("modules") or k:match("core") or k:match("keymap") then
+      package.loaded[k] = nil
+    end
+  end
+  dofile(vim.fn.expand("%"))
   plugins.compile()
   plugins.convert_compile_file()
+  require('_compiled')
 end
 
 function plugins.auto_compile()
   local file = vim.fn.expand('%:p')
-  if file:match(modules_dir) then
-    plugins.clean()
-    plugins.compile()
-    plugins.convert_compile_file()
+  if file:match(vim.fn.resolve(vim_path)) then
+    -- plugins.clean()
+    plugins.magic_compile()
   end
 end
 

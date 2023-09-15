@@ -25,6 +25,7 @@ fi
 
 brew install fzf
 $(brew --prefix)/opt/fzf/install
+brew install fd
 brew install rg
 brew install nvim
 brew install tmux
