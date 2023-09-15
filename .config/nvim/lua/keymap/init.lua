@@ -54,11 +54,11 @@ local plug_map = {
   -- ["n|<Leader>fz"]     = map_cr('Farf'):with_noremap():with_silent();
   -- ["v|<Leader>fz"]     = map_cr('Farf'):with_noremap():with_silent();
   -- Plugin Lua FZF
-  ["n|<C-p>"]                 = map_cu('FzfLua git_files'):with_noremap():with_silent(),
-  ["n|<Leader><C-p>"]         = map_cu('execute "FzfLua files cwd=" . expand("%:h")'):with_noremap(),
+  -- ["n|<C-p>"]                 = map_cu('FzfLua git_files'):with_noremap():with_silent(),
+  -- ["n|<Leader><C-p>"]         = map_cu('execute "FzfLua files cwd=" . expand("%:h")'):with_noremap(),
   ["n|<Leader><Leader><C-p>"] = map_cu('FzfLua files'):with_noremap():with_silent(),
   ["n|<Leader>h"]             = map_cu('FzfLua oldfiles'):with_noremap():with_silent(),
-  ["n|<Leader><Leader>s"]     = map_cu('FzfLua grep'):with_noremap():with_silent(),
+  -- ["n|<Leader><Leader>s"]     = map_cu('FzfLua grep'):with_noremap():with_silent(),
   -- Plugin Telescope
   -- ["n|<Leader>bb"]     = map_cu('Telescope buffers'):with_noremap():with_silent(),
   -- ["n|<Leader>fa"]     = map_cu('DashboardFindWord'):with_noremap():with_silent(),
