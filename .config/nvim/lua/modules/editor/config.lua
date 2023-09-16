@@ -34,7 +34,7 @@ function config.fzf_lua()
   local fzf = require('fzf-lua')
 
   vim.keymap.set('n', '<C-p>', function()
-    fzf.fzf_exec('fd -H -I --type f --strip-cwd-prefix | ~/.dotfiles/file-web-devicon', {
+    fzf.fzf_exec('fd -H --type f --strip-cwd-prefix | ~/.dotfiles/file-web-devicon', {
       actions = fzf.defaults.actions.files,
       fzf_opts = { ['--nth'] = 2, ['--delimiter'] = fzf.utils.nbsp },
       previewer = 'builtin',
@@ -42,7 +42,7 @@ function config.fzf_lua()
   end, { noremap = true })
 
   vim.keymap.set('n', '<leader><C-p>', function()
-    fzf.fzf_exec('fd -H -I --type f --strip-cwd-prefix | ~/.dotfiles/file-web-devicon', {
+    fzf.fzf_exec('fd -H --type f --strip-cwd-prefix | ~/.dotfiles/file-web-devicon', {
       actions = fzf.defaults.actions.files,
       cwd = vim.api.nvim_eval("expand('%:p:~:.:h')"),
       prompt = vim.api.nvim_eval("expand('%:p:~:.:h')") .. '> ',
