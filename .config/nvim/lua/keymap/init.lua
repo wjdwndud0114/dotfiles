@@ -107,8 +107,8 @@ local plug_map = {
   ["n|<leader><leader>dt"]    = map_cmd("<Plug>VimspectorToggleConditionalBreakpoint"):with_noremap():with_silent(),
   ["n|<leader>de"]            = map_cmd("<Plug>VimspectorBalloonEval"):with_noremap():with_silent(),
   -- Plugin copilot
-  ["i|<C-n>"]                 = map_cmd("<Plug>(copilot-previous)"):with_noremap():with_silent(),
-  ["i|<C-m>]"]                = map_cmd("<Plug>(copilot-next)"):with_noremap():with_silent(),
+  ["i|<C-n><C-n>"]            = map_cmd("<Plug>(copilot-previous)"):with_noremap():with_silent(),
+  ["i|<C-n>"]                 = map_cmd("<Plug>(copilot-next)"):with_noremap():with_silent(),
   -- Plugin symbol outline
   -- ["n|<leader>so"]            = map_cu('SymbolsOutline'):with_noremap():with_silent(),
 }
