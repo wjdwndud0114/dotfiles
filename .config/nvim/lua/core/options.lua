@@ -107,8 +107,8 @@ local function load_options()
     colorcolumn    = "80",
     foldenable     = true,
     signcolumn     = "number",
-    conceallevel   = 2,
-    concealcursor  = "niv",
+    -- conceallevel   = 2,
+    -- concealcursor  = "niv",
   }
 
   -- if global.is_mac then
