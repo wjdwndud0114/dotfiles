@@ -19,4 +19,6 @@ alias g='git'
 alias o='open'
 alias ls='exa'
 
+alias cnvim='cd ~/.config/nvim; nvim'
+
 function cs() { cd "$@" && ls; }
