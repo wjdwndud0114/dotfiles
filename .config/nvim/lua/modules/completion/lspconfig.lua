@@ -7,7 +7,14 @@ if not packer_plugins['lspsaga.nvim'].loaded then
   vim.cmd [[packadd lspsaga.nvim]]
 end
 
-require('lspsaga').setup({})
+require('lspsaga').setup({
+  finder = {
+    keys = {
+      vsplit = 'v',
+      split = 's',
+    }
+  }
+})
 
 -- configure signs icons
 local signs = {

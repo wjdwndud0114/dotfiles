@@ -38,9 +38,9 @@ editor['rmagatti/auto-session'] = {
   config = conf.auto_session
 }
 
-editor['simrat39/symbols-outline.nvim'] = {
-  event = 'BufReadPre',
-  config = conf.symbols_outline
-}
+-- editor['simrat39/symbols-outline.nvim'] = {
+--   event = 'BufReadPre',
+--   config = conf.symbols_outline
+-- }
 
 return editor

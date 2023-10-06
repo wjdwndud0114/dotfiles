@@ -33,9 +33,10 @@ local plug_map = {
   ["n|gi"]                    = map_cmd("<cmd>lua vim.lsp.buf.implementation()<CR>"):with_noremap():with_silent(),
   ["n|gs"]                    = map_cr('Lspsaga signature_help'):with_noremap(),
   ["n|gr"]                    = map_cr('Lspsaga rename'):with_noremap():with_silent(),
-  ["n|gh"]                    = map_cr('Lspsaga lsp_finder'):with_noremap():with_silent(),
-  ["n|<leader>gt"]            = map_cmd("<cmd>lua vim.lsp.buf.type_definition()<CR>"):with_noremap():with_silent(),
-  ["n|<Leader>w"]             = map_cmd("<cmd>lua vim.lsp.buf.workspace_symbol()<CR>"):with_noremap():with_silent(),
+  ["n|gh"]                    = map_cr('Lspsaga finder'):with_noremap():with_silent(),
+  ["n|<leader>so"]            = map_cr('Lspsaga outline'):with_noremap():with_silent(),
+  ["n|<leader>gt"]            = map_cmd('<cmd>lua vim.lsp.buf.type_definition()<CR>'):with_noremap():with_silent(),
+  ["n|<Leader>w"]             = map_cmd('<cmd>lua vim.lsp.buf.workspace_symbol()<CR>'):with_noremap():with_silent(),
   ["n|<Leader>cd"]            = map_cr('Lspsaga show_line_diagnostics'):with_noremap():with_silent(),
   -- ["n|<Leader>ct"]     = map_args("Template"),
   -- ["n|<Leader>tf"]     = map_cu('DashboardNewFile'):with_noremap():with_silent(),
@@ -109,7 +110,7 @@ local plug_map = {
   ["i|<C-n>"]                 = map_cmd("<Plug>(copilot-previous)"):with_noremap():with_silent(),
   ["i|<C-m>]"]                = map_cmd("<Plug>(copilot-next)"):with_noremap():with_silent(),
   -- Plugin symbol outline
-  ["n|<leader>so"]            = map_cu('SymbolsOutline'):with_noremap():with_silent(),
+  -- ["n|<leader>so"]            = map_cu('SymbolsOutline'):with_noremap():with_silent(),
 }
 
 bind.nvim_load_mapping(plug_map)
