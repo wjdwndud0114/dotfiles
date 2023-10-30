@@ -58,21 +58,22 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
     update_in_insert = false,
   })
 
-local servers_root = vim.fn.stdpath('data') .. global.path_sep .. 'mason' .. global.path_sep
+local servers_root = vim.fn.stdpath('data') .. global.path_sep .. 'mason' .. global.path_sep .. 'bin' .. global.path_sep
 
--- lspconfig.gopls.setup {
---   cmd = {"gopls","--remote=auto"},
---   on_attach = enhance_attach,
---   capabilities = capabilities,
---   init_options = {
---     usePlaceholders=true,
---     completeUnimported=true,
---   }
--- }
+lspconfig.gopls.setup {
+  cmd = {
+    servers_root .. 'gopls', "--remote=auto" },
+  on_attach = enhance_attach,
+  capabilities = capabilities,
+  init_options = {
+    usePlaceholders = true,
+    completeUnimported = true,
+  }
+}
 
 lspconfig.lua_ls.setup {
   cmd = {
-    servers_root .. 'bin' .. global.path_sep .. 'lua-language-server',
+    servers_root .. 'lua-language-server',
   },
   settings = {
     Lua = {
@@ -103,10 +104,7 @@ lspconfig.lua_ls.setup {
 }
 
 lspconfig.tsserver.setup {
-  cmd = { servers_root ..
-  'bin' ..
-  global.path_sep ..
-  'typescript-language-server', '--stdio' },
+  cmd = { servers_root .. 'typescript-language-server', '--stdio' },
   on_attach = function(client, bufnr)
     -- use null-ls & eslint_d for formatting
     client.server_capabilities.documentFormattingProvider = false
@@ -126,10 +124,7 @@ lspconfig.tsserver.setup {
 
 lspconfig.pyright.setup {
   cmd = {
-    servers_root ..
-    'bin' ..
-    global.path_sep .. 'pyright-langserver',
-    '--stdio'
+    servers_root .. 'pyright-langserver', '--stdio', '--watch'
   },
   root_dir = require('lspconfig/util').root_pattern("pyrightconfig.json", ".git", "pyproject.toml", "requirements.txt"),
   on_attach = enhance_attach,
@@ -155,10 +150,7 @@ lspconfig.rust_analyzer.setup {
 }
 
 lspconfig.bashls.setup {
-  cmd = {
-    servers_root ..
-    'bin' .. global.path_sep .. 'bash-language-server'
-  },
+  cmd = { servers_root .. 'bash-language-server' },
   on_attach = enhance_attach,
   capabilities = capabilities
 }
