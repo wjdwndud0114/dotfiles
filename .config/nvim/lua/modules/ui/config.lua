@@ -17,7 +17,7 @@ end
 
 function config.indent_blankline()
   require('ibl').setup({
-    indent = { char = "│" },
+    indent = { char = "│", tab_char = "▏" },
     scope = {
       show_start = false,
       show_end = false,
