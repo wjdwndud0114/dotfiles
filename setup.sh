@@ -14,10 +14,10 @@ for file in $DIR/.config/*; do
 done
 
 echo "Installing packages..."
-which -s brew
+which brew
 if [[ $? != 0 ]] ; then
     # Install Homebrew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 # Restart shell to have the brew install/update
