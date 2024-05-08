@@ -122,11 +122,12 @@ lspconfig.tsserver.setup {
   },
 }
 
+-- vim.lsp.set_log_level("debug")
 lspconfig.pyright.setup {
   cmd = {
     servers_root .. 'pyright-langserver', '--stdio', '--watch'
   },
-  root_dir = require('lspconfig/util').root_pattern("pyrightconfig.json", ".git", "pyproject.toml", "requirements.txt"),
+  root_dir = lspconfig.util.root_pattern("pyrightconfig.json", ".git"),
   on_attach = enhance_attach,
   capabilities = capabilities,
   settings = {
@@ -158,6 +159,12 @@ lspconfig.pyright.setup {
 
 lspconfig.bashls.setup {
   cmd = { servers_root .. 'bash-language-server' },
+  on_attach = enhance_attach,
+  capabilities = capabilities
+}
+
+lspconfig.bufls.setup {
+  cmd = { servers_root .. 'bufls', 'serve' },
   on_attach = enhance_attach,
   capabilities = capabilities
 }
