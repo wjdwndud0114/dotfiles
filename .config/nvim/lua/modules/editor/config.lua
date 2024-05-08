@@ -36,7 +36,11 @@ function config.fzf_lua()
   vim.keymap.set('n', '<C-p>', function()
     fzf.fzf_exec('fd -H --type f --strip-cwd-prefix | ~/.dotfiles/file-web-devicon', {
       actions = fzf.defaults.actions.files,
-      fzf_opts = { ['--nth'] = 2, ['--delimiter'] = fzf.utils.nbsp },
+      fzf_opts = {
+        ['--multi'] = 999,
+        ['--nth'] = 2,
+        ['--delimiter'] = fzf.utils.nbsp
+      },
       previewer = 'builtin',
     })
   end, { noremap = true })
@@ -46,7 +50,11 @@ function config.fzf_lua()
       actions = fzf.defaults.actions.files,
       cwd = vim.api.nvim_eval("expand('%:p:~:.:h')"),
       prompt = vim.api.nvim_eval("expand('%:p:~:.:h')") .. '> ',
-      fzf_opts = { ['--nth'] = 2, ['--delimiter'] = fzf.utils.nbsp },
+      fzf_opts = {
+        ['--multi'] = 999,
+        ['--nth'] = 2,
+        ['--delimiter'] = fzf.utils.nbsp
+      },
       previewer = 'builtin',
     })
   end, { noremap = true })
@@ -57,6 +65,7 @@ function config.fzf_lua()
         actions = fzf.defaults.actions.files,
         prompt = 'Rg> ',
         fzf_opts = {
+          ['--multi'] = 999,
           ['--nth'] = 2,
           ['--delimiter'] = fzf.utils.nbsp
         },
@@ -71,6 +80,7 @@ function config.fzf_lua()
         cwd = vim.api.nvim_eval("expand('%:p:~:.:h')"),
         prompt = vim.api.nvim_eval("expand('%:p:~:.:h')") .. ' Rg> ',
         fzf_opts = {
+          ['--multi'] = 999,
           ['--nth'] = 2,
           ['--delimiter'] = fzf.utils.nbsp
         },
