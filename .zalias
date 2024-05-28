@@ -16,6 +16,16 @@ alias gm='git merge'
 alias gcp='git cherry-pick'
 alias g='git'
 
+function gia() {
+  if git merge-base --is-ancestor "$1" "$2"; then
+    echo "$1 is an ancestor of $2"
+  elif git merge-base --is-ancestor "$2" "$1"; then
+    echo "$2 is an ancestor of $1"
+  else
+    echo "No ancestor found"
+  fi
+}
+
 alias o='open'
 alias ls='exa'
 
