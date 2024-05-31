@@ -38,6 +38,7 @@ local plug_map = {
   ["n|<leader>gt"]            = map_cmd('<cmd>lua vim.lsp.buf.type_definition()<CR>'):with_noremap():with_silent(),
   ["n|<Leader>w"]             = map_cmd('<cmd>lua vim.lsp.buf.workspace_symbol()<CR>'):with_noremap():with_silent(),
   ["n|<Leader>cd"]            = map_cr('Lspsaga show_line_diagnostics'):with_noremap():with_silent(),
+  ["n|<Leader>cb"]            = map_cr('Lspsaga show_buf_diagnostics'):with_noremap():with_silent(),
   -- ["n|<Leader>ct"]     = map_args("Template"),
   -- ["n|<Leader>tf"]     = map_cu('DashboardNewFile'):with_noremap():with_silent(),
   -- Plugin nvim-tree
