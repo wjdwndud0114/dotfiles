@@ -27,7 +27,7 @@ function gia() {
 }
 
 alias o='open'
-alias ls='exa'
+alias ls='eza'
 
 alias cnvim='cd ~/.config/nvim; nvim'
 

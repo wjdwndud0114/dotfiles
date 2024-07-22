@@ -29,7 +29,7 @@ brew install fd
 brew install rg
 brew install nvim
 brew install tmux
-brew install exa
+brew install eza
 brew install git-delta
 brew install lvav
 
