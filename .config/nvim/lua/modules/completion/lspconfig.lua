@@ -71,6 +71,14 @@ lspconfig.gopls.setup {
   }
 }
 
+lspconfig.rust_analyzer.setup {
+  cmd = {
+    servers_root .. 'rust-analyzer',
+  },
+  on_attach = enhance_attach,
+  capabilities = capabilities,
+}
+
 lspconfig.lua_ls.setup {
   cmd = {
     servers_root .. 'lua-language-server',
@@ -103,12 +111,33 @@ lspconfig.lua_ls.setup {
   capabilities = capabilities,
 }
 
-lspconfig.tsserver.setup {
+lspconfig.ts_ls.setup {
   cmd = { servers_root .. 'typescript-language-server', '--stdio' },
   on_attach = function(client, bufnr)
     -- use null-ls & eslint_d for formatting
     client.server_capabilities.documentFormattingProvider = false
     enhance_attach(client, bufnr)
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      group = vim.api.nvim_create_augroup("TS_add_missing_imports", { clear = true }),
+      desc = "TS_add_missing_imports",
+      pattern = { "*.ts", "*.tsx" },
+      callback = function()
+        vim.lsp.buf.code_action({
+          apply = true,
+          context = {
+            only = { "source.addMissingImports" },
+          },
+        })
+      end,
+    })
+    vim.keymap.set('n', '<leader>o', function()
+      vim.lsp.buf.code_action({
+        apply = true,
+        context = {
+          only = { "source.organizeImports" },
+        },
+      })
+    end)
   end,
   flags = {
     debounce_text_changes = 150,
@@ -119,6 +148,7 @@ lspconfig.tsserver.setup {
     preferences = {
       importModuleSpecifierPreference = "non-relative",
     },
+    maxTsServerMemory = 8192
   },
 }
 
