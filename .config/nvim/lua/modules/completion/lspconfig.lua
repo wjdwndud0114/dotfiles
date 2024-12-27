@@ -193,8 +193,8 @@ lspconfig.bashls.setup {
   capabilities = capabilities
 }
 
-lspconfig.bufls.setup {
-  cmd = { servers_root .. 'bufls', 'serve' },
+lspconfig.buf_ls.setup {
+  cmd = { servers_root .. 'buf_ls', 'serve' },
   on_attach = enhance_attach,
   capabilities = capabilities
 }
