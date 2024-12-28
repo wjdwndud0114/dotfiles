@@ -1,0 +1,24 @@
+
+[env]
+TERM = "xterm-256color-italic"
+
+[font]
+size = 15.5
+
+[font.normal]
+family = "RobotoMono Nerd Font"
+style = "Regular"
+
+[scrolling]
+history = 10000
+
+[selection]
+save_to_clipboard = true
+semantic_escape_chars = ''',│`|:"' ()[]{}<>'''
+
+[window]
+decorations = "full"
+
+[general]
+live_config_reload = true
+import = ["/Users/kevin/.config/alacritty/dracula.toml"]

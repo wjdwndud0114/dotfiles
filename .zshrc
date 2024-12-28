@@ -41,8 +41,8 @@ source ~/Git/zsh-snap/znap.zsh  # Start Znap
 znap prompt sindresorhus/pure
 
 # `znap source` automatically downloads and installs your plugins.
-znap source marlonrichert/zsh-autocomplete
 znap source zdharma-continuum/fast-syntax-highlighting
+znap source marlonrichert/zsh-autocomplete
 znap source zsh-users/zsh-completions
 
 # brew
@@ -56,9 +56,6 @@ export FZF_CTRL_T_COMMAND="rg --files --hidden --no-ignore-vcs -g '!{node_module
 alias f="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}' | fzf"
 alias vif='vim $(f)'
 bindkey '^[[A'  fzf-history-widget
-
-# `znap eval` caches any kind of command output for you.
-znap eval iterm2 'curl -fsSL https://iterm2.com/shell_integration/zsh'
 
 # Add Visual Studio Code (code)
 export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
