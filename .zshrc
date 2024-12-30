@@ -20,7 +20,8 @@ unsetopt bg_nice                # Don't Run All Background Jobs At A Lower Prior
 unsetopt hup                    # Don't Kill Jobs On Shell Exit.
 unsetopt check_jobs             # Don't Report On Jobs When Shell Exit.
 
-setopt correctall                 # Turn On Corrections
+setopt correctall               # Turn On Corrections
+setopt interactivecomments      # Needed for autocompletion
 
 # History
 HISTFILE="${ZDOTDIR:-$HOME}/.zhistory"
