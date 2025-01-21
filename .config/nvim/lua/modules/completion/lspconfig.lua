@@ -134,7 +134,7 @@ lspconfig.ts_ls.setup {
       vim.lsp.buf.code_action({
         apply = true,
         context = {
-          only = { "source.organizeImports" },
+          only = { "source.removeUnusedImports" },
         },
       })
     end)
@@ -146,7 +146,7 @@ lspconfig.ts_ls.setup {
   init_options = {
     hostInfo = "neovim",
     preferences = {
-      importModuleSpecifierPreference = "non-relative",
+      importModuleSpecifierPreference = "auto",
     },
     maxTsServerMemory = 8192
   },
