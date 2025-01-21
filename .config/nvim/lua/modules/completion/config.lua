@@ -56,8 +56,11 @@ function config.null_ls()
       -- null_ls.builtins.diagnostics.flake8,
 
       -- JS yaml html markdown
-      null_ls.builtins.formatting.prettierd,
       null_ls.builtins.diagnostics.eslint_d,
+      null_ls.builtins.formatting.eslint_d.with({
+        prefer_local = "node_modules/.bin",
+      }),
+      null_ls.builtins.formatting.prettierd,
       -- null_ls.builtins.code_actions.gitsigns,
 
       -- C/C++
