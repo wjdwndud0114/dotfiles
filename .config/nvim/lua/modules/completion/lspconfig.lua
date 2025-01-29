@@ -146,7 +146,7 @@ lspconfig.ts_ls.setup {
   init_options = {
     hostInfo = "neovim",
     preferences = {
-      importModuleSpecifierPreference = "auto",
+      importModuleSpecifierPreference = "absolute",
     },
     maxTsServerMemory = 8192
   },
@@ -189,12 +189,6 @@ lspconfig.pyright.setup {
 
 lspconfig.bashls.setup {
   cmd = { servers_root .. 'bash-language-server' },
-  on_attach = enhance_attach,
-  capabilities = capabilities
-}
-
-lspconfig.buf_ls.setup {
-  cmd = { servers_root .. 'buf_ls', 'serve' },
   on_attach = enhance_attach,
   capabilities = capabilities
 }

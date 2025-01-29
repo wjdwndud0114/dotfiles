@@ -30,6 +30,7 @@ local load_core = function()
   require('core.mapping')
   require('keymap')
   require('core.event')
+  require('core.filetype')
   pack.load_compile()
 end
 
