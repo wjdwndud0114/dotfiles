@@ -3,6 +3,12 @@ local conf = require('modules.completion.config')
 
 completion['github/copilot.vim'] = {}
 
+completion['CopilotC-Nvim/CopilotChat.nvim'] = {
+  cmd = { 'CopilotChat', 'CopilotChatOpen', 'CopilotChatClose', 'CopilotChatToggle', 'CopilotChatModels', 'CopilotChatAgents' },
+  requires = { 'github/copilot.vim', 'nvim-lua/plenary.nvim' },
+  config = conf.copilot_chat,
+}
+
 completion['neovim/nvim-lspconfig'] = {
   after = 'cmp-nvim-lsp',
   config = conf.nvim_lsp,
