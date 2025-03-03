@@ -146,7 +146,7 @@ lspconfig.ts_ls.setup {
   init_options = {
     hostInfo = "neovim",
     preferences = {
-      importModuleSpecifierPreference = "absolute",
+      importModuleSpecifierPreference = "non-relative",
     },
     maxTsServerMemory = 8192
   },
