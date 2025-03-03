@@ -1,5 +1,9 @@
 local config = {}
 
+function config.copilot_chat()
+  require("CopilotChat").setup()
+end
+
 function config.nvim_lsp()
   require('modules.completion.lspconfig')
 end
