@@ -7,6 +7,11 @@ if not packer_plugins['lspsaga.nvim'].loaded then
   vim.cmd [[packadd lspsaga.nvim]]
 end
 
+-- needed for some reason for line diagnostics for lspsaga
+vim.diagnostic.config({
+  severity_sort = true,
+})
+
 require('lspsaga').setup({
   finder = {
     keys = {
@@ -117,19 +122,19 @@ lspconfig.ts_ls.setup {
     -- use null-ls & eslint_d for formatting
     client.server_capabilities.documentFormattingProvider = false
     enhance_attach(client, bufnr)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      group = vim.api.nvim_create_augroup("TS_add_missing_imports", { clear = true }),
-      desc = "TS_add_missing_imports",
-      pattern = { "*.ts", "*.tsx" },
-      callback = function()
-        vim.lsp.buf.code_action({
-          apply = true,
-          context = {
-            only = { "source.addMissingImports" },
-          },
-        })
-      end,
-    })
+    -- vim.api.nvim_create_autocmd("BufWritePre", {
+    --   group = vim.api.nvim_create_augroup("TS_add_missing_imports", { clear = true }),
+    --   desc = "TS_add_missing_imports",
+    --   pattern = { "*.ts", "*.tsx" },
+    --   callback = function()
+    --     vim.lsp.buf.code_action({
+    --       apply = true,
+    --       context = {
+    --         only = { "source.addMissingImports" },
+    --       },
+    --     })
+    --   end,
+    -- })
     vim.keymap.set('n', '<leader>o', function()
       vim.lsp.buf.code_action({
         apply = true,
