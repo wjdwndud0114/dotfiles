@@ -49,6 +49,8 @@ function config.nvim_cmp()
 end
 
 function config.null_ls()
+  -- hack to make this work for new nvim version
+  vim.lsp._request_name_to_capability = vim.lsp.protocol._request_name_to_capability
   local null_ls = require('null-ls')
 
   null_ls.setup({

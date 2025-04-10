@@ -32,6 +32,7 @@ function config.fzf_lua()
   -- https://github.com/ibhagwan/fzf-lua/wiki/Advanced#fzf-exec-api
   -- speed up icon: https://github.com/MaartenStaa/file-web-devicons
   local fzf = require('fzf-lua')
+  fzf.register_ui_select()
 
   vim.keymap.set('n', '<C-p>', function()
     fzf.fzf_exec('fd -H --type f --strip-cwd-prefix | ~/.dotfiles/file-web-devicon', {

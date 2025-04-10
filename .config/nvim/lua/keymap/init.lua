@@ -110,6 +110,8 @@ local plug_map = {
   -- Plugin copilot
   ["i|<C-n><C-n>"]            = map_cmd("<Plug>(copilot-previous)"):with_noremap():with_silent(),
   ["i|<C-n>"]                 = map_cmd("<Plug>(copilot-next)"):with_noremap():with_silent(),
+  -- Plugin copilotchat
+  ["n|<leader>cc"]            = map_cr("CopilotChat"):with_noremap():with_silent(),
   -- Plugin symbol outline
   -- ["n|<leader>so"]            = map_cu('SymbolsOutline'):with_noremap():with_silent(),
 }
