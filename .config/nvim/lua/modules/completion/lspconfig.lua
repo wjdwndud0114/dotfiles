@@ -37,7 +37,7 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protoc
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 function _G.reload_lsp()
-  vim.lsp.stop_client(vim.lsp.get_active_clients())
+  vim.lsp.stop_client(vim.lsp.get_clients())
   vim.cmd [[edit]]
 end
 

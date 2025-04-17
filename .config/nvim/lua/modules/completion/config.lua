@@ -62,8 +62,8 @@ function config.null_ls()
       -- null_ls.builtins.diagnostics.flake8,
 
       -- JS yaml html markdown
-      null_ls.builtins.diagnostics.eslint_d,
-      null_ls.builtins.formatting.eslint_d.with({
+      require('none-ls.diagnostics.eslint_d'),
+      require('none-ls.formatting.eslint_d').with({
         prefer_local = "node_modules/.bin",
       }),
       null_ls.builtins.formatting.prettierd,
