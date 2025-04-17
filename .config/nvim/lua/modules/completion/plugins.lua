@@ -42,10 +42,14 @@ completion['hrsh7th/nvim-cmp'] = {
   }
 }
 
-completion['jose-elias-alvarez/null-ls.nvim'] = {
+completion['nvimtools/none-ls-extras.nvim'] = {
+  before = 'nvimtools/none-ls.nvim',
+}
+
+completion['nvimtools/none-ls.nvim'] = {
   event = 'BufReadPost',
   config = conf.null_ls,
-  requires = { { "nvim-lua/plenary.nvim" } },
+  requires = { { "nvim-lua/plenary.nvim", "nvimtools/none-ls-extras.nvim" } },
 }
 
 return completion

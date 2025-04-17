@@ -71,8 +71,8 @@ function config.null_ls()
         end
       },
       null_ls.builtins.formatting.prettierd,
-      null_ls.builtins.diagnostics.eslint_d,
-      null_ls.builtins.formatting.eslint_d.with({
+      require('none-ls.diagnostics.eslint_d'),
+      require('none-ls.formatting.eslint_d').with({
         prefer_local = "node_modules/.bin",
       }),
       null_ls.builtins.formatting.prettierd,
