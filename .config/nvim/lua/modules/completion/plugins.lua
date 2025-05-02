@@ -49,7 +49,7 @@ completion['nvimtools/none-ls-extras.nvim'] = {
 completion['nvimtools/none-ls.nvim'] = {
   event = 'BufReadPost',
   config = conf.null_ls,
-  requires = { { "nvim-lua/plenary.nvim", "nvimtools/none-ls-extras.nvim" } },
+  requires = { { "nvim-lua/plenary.nvim" } },
 }
 
 return completion
