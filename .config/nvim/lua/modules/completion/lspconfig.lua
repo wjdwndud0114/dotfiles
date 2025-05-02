@@ -22,16 +22,20 @@ require('lspsaga').setup({
 })
 
 -- configure signs icons
-local signs = {
-  DiagnosticSignError = " ",
-  DiagnosticSignWarn = " ",
-  DiagnosticSignHint = " ",
-  DiagnosticSignInfo = " ",
-}
-
-for hl, icon in pairs(signs) do
-  vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-end
+vim.diagnostic.config({
+  text = {
+    [vim.diagnostic.severity.ERROR] = " ",
+    [vim.diagnostic.severity.WARN] = " ",
+    [vim.diagnostic.severity.INFO] = "󰋼 ",
+    [vim.diagnostic.severity.HINT] = "󰌵 ",
+  },
+  numhl = {
+    [vim.diagnostic.severity.ERROR] = "",
+    [vim.diagnostic.severity.WARN] = "",
+    [vim.diagnostic.severity.HINT] = "",
+    [vim.diagnostic.severity.INFO] = "",
+  },
+})
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 capabilities.textDocument.completion.completionItem.snippetSupport = true
