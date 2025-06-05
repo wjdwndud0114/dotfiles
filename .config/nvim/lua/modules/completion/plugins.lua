@@ -3,10 +3,18 @@ local conf = require('modules.completion.config')
 
 completion['github/copilot.vim'] = {}
 
-completion['CopilotC-Nvim/CopilotChat.nvim'] = {
-  cmd = { 'CopilotChat', 'CopilotChatOpen', 'CopilotChatClose', 'CopilotChatToggle', 'CopilotChatModels', 'CopilotChatAgents' },
-  requires = { 'github/copilot.vim', 'nvim-lua/plenary.nvim' },
-  config = conf.copilot_chat,
+
+
+completion['azorng/goose.nvim'] = {
+  requires = { "nvim-lua/plenary.nvim",
+    {
+      "MeanderingProgrammer/render-markdown.nvim",
+      opts = {
+        anti_conceal = { enabled = false },
+      },
+    }
+  },
+  config = conf.goose,
 }
 
 completion['neovim/nvim-lspconfig'] = {
