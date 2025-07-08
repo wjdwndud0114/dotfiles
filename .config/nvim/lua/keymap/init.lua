@@ -61,6 +61,9 @@ local plug_map = {
   ["n|<Leader>t"]             = map_cu('FzfLua tabs'):with_noremap():with_silent(),
   ["n|<Leader><Leader><C-p>"] = map_cu('FzfLua files'):with_noremap():with_silent(),
   ["n|<Leader>h"]             = map_cu('FzfLua oldfiles'):with_noremap():with_silent(),
+  ["n|<Leader>b"]             = map_cu('FzfLua buffers'):with_noremap():with_silent(),
+  ["n|<Leader>bb"]            = map_cr('bnext'):with_noremap():with_silent(),
+  ["n|<Leader>bB"]            = map_cr('bprev'):with_noremap():with_silent(),
   -- ["n|<Leader><Leader>s"]     = map_cu('FzfLua grep'):with_noremap():with_silent(),
   -- Plugin Telescope
   -- ["n|<Leader>bb"]     = map_cu('Telescope buffers'):with_noremap():with_silent(),
@@ -111,7 +114,7 @@ local plug_map = {
   ["i|<C-n><C-n>"]            = map_cmd("<Plug>(copilot-previous)"):with_noremap():with_silent(),
   ["i|<C-n>"]                 = map_cmd("<Plug>(copilot-next)"):with_noremap():with_silent(),
   -- Plugin copilotchat
-  ["n|<leader>cc"]            = map_cr("CopilotChat"):with_noremap():with_silent(),
+  -- ["n|<leader>cc"]            = map_cr("CopilotChat"):with_noremap():with_silent(),
   -- Plugin symbol outline
   -- ["n|<leader>so"]            = map_cu('SymbolsOutline'):with_noremap():with_silent(),
 }
