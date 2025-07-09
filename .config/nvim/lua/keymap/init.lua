@@ -34,6 +34,8 @@ local plug_map = {
   ["n|gs"]                    = map_cr('Lspsaga signature_help'):with_noremap(),
   ["n|gr"]                    = map_cr('Lspsaga rename'):with_noremap():with_silent(),
   ["n|gh"]                    = map_cr('Lspsaga finder'):with_noremap():with_silent(),
+  ["n|gb"]                    = map_cr('bnext'):with_noremap():with_silent(),
+  ["n|gB"]                    = map_cr('bprev'):with_noremap():with_silent(),
   ["n|<leader>so"]            = map_cr('Lspsaga outline'):with_noremap():with_silent(),
   ["n|<leader>gt"]            = map_cmd('<cmd>lua vim.lsp.buf.type_definition()<CR>'):with_noremap():with_silent(),
   ["n|<Leader>w"]             = map_cmd('<cmd>lua vim.lsp.buf.workspace_symbol()<CR>'):with_noremap():with_silent(),
@@ -62,8 +64,6 @@ local plug_map = {
   ["n|<Leader><Leader><C-p>"] = map_cu('FzfLua files'):with_noremap():with_silent(),
   ["n|<Leader>h"]             = map_cu('FzfLua oldfiles'):with_noremap():with_silent(),
   ["n|<Leader>b"]             = map_cu('FzfLua buffers'):with_noremap():with_silent(),
-  ["n|<Leader>bb"]            = map_cr('bnext'):with_noremap():with_silent(),
-  ["n|<Leader>bB"]            = map_cr('bprev'):with_noremap():with_silent(),
   -- ["n|<Leader><Leader>s"]     = map_cu('FzfLua grep'):with_noremap():with_silent(),
   -- Plugin Telescope
   -- ["n|<Leader>bb"]     = map_cu('Telescope buffers'):with_noremap():with_silent(),
