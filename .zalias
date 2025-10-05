@@ -16,6 +16,9 @@ alias gm='git merge'
 alias gcp='git cherry-pick'
 alias g='git'
 
+alias geu='nvim "+/<<<<<<<" `g ls-files --unmerged | cut -f2 | sort -u`'
+alias gau='ga `g ls-files --unmerged | cut -f2 | sort -u`'
+
 function gia() {
   if git merge-base --is-ancestor "$1" "$2"; then
     echo "$1 is an ancestor of $2"
