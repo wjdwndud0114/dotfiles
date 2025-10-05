@@ -159,7 +159,7 @@ lspconfig.ts_ls.setup {
       includeCompletionsForImportStatements = true,
       importModuleSpecifierPreference = "non-relative",
     },
-    maxTsServerMemory = 8192
+    maxTsServerMemory = 12288
   },
 }
 
