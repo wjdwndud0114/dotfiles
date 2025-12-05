@@ -3,20 +3,6 @@ local conf = require('modules.completion.config')
 
 completion['github/copilot.vim'] = {}
 
-
-
-completion['azorng/goose.nvim'] = {
-  requires = { "nvim-lua/plenary.nvim",
-    {
-      "MeanderingProgrammer/render-markdown.nvim",
-      opts = {
-        anti_conceal = { enabled = false },
-      },
-    }
-  },
-  config = conf.goose,
-}
-
 completion['neovim/nvim-lspconfig'] = {
   after = 'cmp-nvim-lsp',
   config = conf.nvim_lsp,
