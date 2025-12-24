@@ -1,4 +1,3 @@
-local lspconfig = require 'lspconfig'
 local global = require 'core.global'
 
 local enhance_attach = require('modules/completion/format').enhance_attach
@@ -67,31 +66,58 @@ vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(
     update_in_insert = false,
   })
 
+-- Setup LspAttach autocmd for on_attach behavior
+vim.api.nvim_create_autocmd('LspAttach', {
+  group = vim.api.nvim_create_augroup('UserLspConfig', { clear = true }),
+  callback = function(args)
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+    local bufnr = args.buf
+
+    -- Call the enhance_attach function
+    enhance_attach(client, bufnr)
+
+    -- Special handling for ts_ls
+    if client.name == 'ts_ls' then
+      client.server_capabilities.documentFormattingProvider = false
+      vim.keymap.set('n', '<leader>o', function()
+        vim.lsp.buf.code_action({
+          apply = true,
+          context = {
+            only = { "source.removeUnusedImports" },
+          },
+        })
+      end, { buffer = bufnr })
+    end
+  end,
+})
+
 local servers_root = vim.fn.stdpath('data') .. global.path_sep .. 'mason' .. global.path_sep .. 'bin' .. global.path_sep
 
-lspconfig.gopls.setup {
-  cmd = {
-    servers_root .. 'gopls', "--remote=auto" },
-  on_attach = enhance_attach,
+-- Configure gopls
+vim.lsp.config('gopls', {
+  cmd = { servers_root .. 'gopls', "--remote=auto" },
+  filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+  root_markers = { 'go.work', 'go.mod', '.git' },
   capabilities = capabilities,
   init_options = {
     usePlaceholders = true,
     completeUnimported = true,
   }
-}
+})
 
-lspconfig.rust_analyzer.setup {
-  cmd = {
-    servers_root .. 'rust-analyzer',
-  },
-  on_attach = enhance_attach,
+-- Configure rust_analyzer
+vim.lsp.config('rust_analyzer', {
+  cmd = { servers_root .. 'rust-analyzer' },
+  filetypes = { 'rust' },
+  root_markers = { 'Cargo.toml', 'rust-project.json', '.git' },
   capabilities = capabilities,
-}
+})
 
-lspconfig.lua_ls.setup {
-  cmd = {
-    servers_root .. 'lua-language-server',
-  },
+-- Configure lua_ls
+vim.lsp.config('lua_ls', {
+  cmd = { servers_root .. 'lua-language-server' },
+  filetypes = { 'lua' },
+  root_markers = { '.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml', 'stylua.toml', 'selene.toml', 'selene.yml', '.git' },
   settings = {
     Lua = {
       format = {
@@ -102,7 +128,6 @@ lspconfig.lua_ls.setup {
         }
       },
       diagnostics = {
-        -- enable = true,
         globals = { "vim", "packer_plugins" },
         neededFileStatus = {
           ["codestyle-check"] = "Any"
@@ -114,40 +139,14 @@ lspconfig.lua_ls.setup {
       },
     },
   },
-  on_attach = function(client, bufnr)
-    enhance_attach(client, bufnr)
-  end,
   capabilities = capabilities,
-}
+})
 
-lspconfig.ts_ls.setup {
+-- Configure ts_ls
+vim.lsp.config('ts_ls', {
   cmd = { servers_root .. 'typescript-language-server', '--stdio' },
-  on_attach = function(client, bufnr)
-    -- use null-ls & eslint_d for formatting
-    client.server_capabilities.documentFormattingProvider = false
-    enhance_attach(client, bufnr)
-    -- vim.api.nvim_create_autocmd("BufWritePre", {
-    --   group = vim.api.nvim_create_augroup("TS_add_missing_imports", { clear = true }),
-    --   desc = "TS_add_missing_imports",
-    --   pattern = { "*.ts", "*.tsx" },
-    --   callback = function()
-    --     vim.lsp.buf.code_action({
-    --       apply = true,
-    --       context = {
-    --         only = { "source.addMissingImports" },
-    --       },
-    --     })
-    --   end,
-    -- })
-    vim.keymap.set('n', '<leader>o', function()
-      vim.lsp.buf.code_action({
-        apply = true,
-        context = {
-          only = { "source.removeUnusedImports" },
-        },
-      })
-    end)
-  end,
+  filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx' },
+  root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
   flags = {
     debounce_text_changes = 150,
   },
@@ -161,15 +160,13 @@ lspconfig.ts_ls.setup {
     },
     maxTsServerMemory = 12288
   },
-}
+})
 
--- vim.lsp.set_log_level("debug")
-lspconfig.pyright.setup {
-  cmd = {
-    servers_root .. 'pyright-langserver', '--stdio', '--watch'
-  },
-  root_dir = lspconfig.util.root_pattern("pyrightconfig.json", ".git"),
-  on_attach = enhance_attach,
+-- Configure pyright
+vim.lsp.config('pyright', {
+  cmd = { servers_root .. 'pyright-langserver', '--stdio', '--watch' },
+  filetypes = { 'python' },
+  root_markers = { 'pyrightconfig.json', 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git' },
   capabilities = capabilities,
   settings = {
     python = {
@@ -182,36 +179,22 @@ lspconfig.pyright.setup {
       }
     }
   }
-}
+})
 
--- lspconfig.clangd.setup {
---   cmd = {
---     "clangd",
---     "--background-index",
---     "--suggest-missing-includes",
---     "--clang-tidy",
---     "--header-insertion=iwyu",
---   },
--- }
-
--- lspconfig.rust_analyzer.setup {
---   capabilities = capabilities,
--- }
-
-lspconfig.bashls.setup {
-  cmd = { servers_root .. 'bash-language-server' },
-  on_attach = enhance_attach,
+-- Configure bashls
+vim.lsp.config('bashls', {
+  cmd = { servers_root .. 'bash-language-server', 'start' },
+  filetypes = { 'sh', 'bash' },
+  root_markers = { '.git' },
   capabilities = capabilities
-}
+})
 
-local servers = {
-  -- 'dockerls',
-  -- 'bashls',
-}
-
-for _, server in ipairs(servers) do
-  lspconfig[server].setup {
-    on_attach = enhance_attach,
-    capabilities = capabilities
-  }
-end
+-- Enable all configured LSP servers
+vim.lsp.enable({
+  'gopls',
+  'rust_analyzer',
+  'lua_ls',
+  'ts_ls',
+  'pyright',
+  'bashls',
+})
