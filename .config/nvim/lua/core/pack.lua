@@ -78,6 +78,10 @@ function plugins.ensure_plugins()
 end
 
 function plugins.convert_compile_file()
+  if io.open(packer_compiled, "r") == nil then
+    return
+  end
+
   local lines = {}
   local lnum = 1
   lines[#lines + 1] = 'vim.cmd [[packadd packer.nvim]]\n'
