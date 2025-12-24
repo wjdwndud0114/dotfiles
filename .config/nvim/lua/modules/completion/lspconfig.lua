@@ -198,3 +198,22 @@ vim.lsp.enable({
   'pyright',
   'bashls',
 })
+
+-- Fix: Attach LSP to buffers that were opened before LSP was enabled
+-- (e.g., first file on startup or session restoration)
+local function attach_lsp_to_existing_buffers()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_loaded(buf) and vim.api.nvim_buf_get_name(buf) ~= '' then
+      vim.api.nvim_buf_call(buf, function()
+        if vim.bo.filetype == '' then
+          vim.cmd('filetype detect')
+        end
+        if vim.bo.filetype ~= '' then
+          vim.api.nvim_exec_autocmds('FileType', { buffer = buf, modeline = false })
+        end
+      end)
+    end
+  end
+end
+
+vim.api.nvim_create_autocmd('SessionLoadPost', { callback = function() vim.schedule(attach_lsp_to_existing_buffers) end })
