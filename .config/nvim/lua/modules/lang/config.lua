@@ -7,7 +7,7 @@ function config.nvim_treesitter()
     "markdown", "markdown_inline", "bash", "comment", "css", "dockerfile", "go", "graphql", "html",
     "http", "java", "javascript",
     "jsdoc", "json", "json5", "latex", "lua", "make", "perl", "python", "regex", "ruby", "rust", "scss", "tsx",
-    "typescript", "vim", "yaml", "typescriptreact"
+    "typescript", "vim", "yaml"
   }
   require('nvim-treesitter').install(filetypes)
 
