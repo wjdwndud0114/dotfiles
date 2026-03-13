@@ -10,7 +10,7 @@ end
 
 function config.mason_lspconfig()
   require("mason-lspconfig").setup({
-    ensure_installed = { "bashls", "pyright", "ts_ls", "lua_ls" }
+    ensure_installed = { "bashls", "pyright", "ts_ls", "lua_ls", "ruff" }
   })
 end
 
@@ -52,13 +52,6 @@ function config.null_ls()
   null_ls.setup({
     on_attach = require('modules/completion/format').enhance_attach,
     sources = {
-      -- Python
-      -- null_ls.builtins.formatting.autopep8,
-      -- null_ls.builtins.formatting.isort,
-      -- null_ls.builtins.diagnostics.flake8,
-
-      -- JS yaml html markdown
-      null_ls.builtins.formatting.black,
       null_ls.builtins.diagnostics.mypy.with {
         method = null_ls.methods.DIAGNOSTICS_ON_SAVE,
         command = "mypy-daemon",

@@ -88,6 +88,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
         })
       end, { buffer = bufnr })
     end
+
+    if client.name == 'ruff' then
+      -- Disable hover in favor of Pyright
+      client.server_capabilities.hoverProvider = false
+    end
   end,
 })
 
@@ -169,16 +174,30 @@ vim.lsp.config('pyright', {
   root_markers = { 'pyrightconfig.json', 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git' },
   capabilities = capabilities,
   settings = {
+    pyright = {
+      -- Using Ruff's import organizer
+      disableOrganizeImports = true,
+    },
     python = {
       analysis = {
-        typeCheckingMode = "off",
-        autoSearchPaths = true,
-        useLibraryCodeForTypes = false,
-        diagnosticMode = "openFilesOnly",
-        autoImportCompletions = true,
+        -- Ignore all files for analysis to exclusively use Ruff for linting
+        ignore = { '*' },
+        -- typeCheckingMode = "off",
+        -- autoSearchPaths = true,
+        -- useLibraryCodeForTypes = false,
+        -- diagnosticMode = "openFilesOnly",
+        -- autoImportCompletions = true,
       }
     }
   }
+})
+
+-- Configure ruff server
+vim.lsp.config('ruff', {
+  cmd = { servers_root .. 'ruff' },
+  filetypes = { 'python' },
+  root_markers = { 'pyproject.toml', 'setup.py', 'setup.cfg', 'requirements.txt', 'Pipfile', '.git' },
+  capabilities = capabilities,
 })
 
 -- Configure bashls
