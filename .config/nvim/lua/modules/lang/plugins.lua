@@ -13,4 +13,9 @@ lang['nvim-treesitter/nvim-treesitter-textobjects'] = {
   branch = 'main',
 }
 
+lang['MeanderingProgrammer/render-markdown.nvim'] = {
+  after = { 'nvim-treesitter' },
+  config = conf.render_markdown,
+}
+
 return lang

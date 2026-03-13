@@ -11,8 +11,10 @@ function config.nvim_treesitter()
   }
   require('nvim-treesitter').install(filetypes)
 
+  local autocmd_filetypes = vim.list_extend(vim.deepcopy(filetypes), { "typescriptreact" })
+
   vim.api.nvim_create_autocmd('FileType', {
-    pattern = filetypes,
+    pattern = autocmd_filetypes,
     callback = function()
       vim.treesitter.start()
       vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
@@ -69,6 +71,12 @@ function config.nvim_treesitter_textobjects()
   vim.keymap.set({ "x", "o" }, "ib", function()
     require "nvim-treesitter-textobjects.select".select_textobject("@block.inner", "textobjects")
   end)
+end
+
+function config.render_markdown()
+  require('render-markdown').setup {
+    completions = { lsp = { enabled = true } },
+  }
 end
 
 return config
