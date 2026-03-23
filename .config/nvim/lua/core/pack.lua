@@ -17,7 +17,11 @@ function Packer:load_plugins()
     local list = {}
     local tmp = vim.split(fn.globpath(modules_dir, '*/plugins.lua'), '\n')
     for _, f in ipairs(tmp) do
-      list[#list + 1] = f:sub(#modules_dir - 6, -1)
+      -- Extract the require path starting from 'modules/'
+      local module_path = f:match("(modules/.*%.lua)$")
+      if module_path then
+        list[#list + 1] = module_path
+      end
     end
     return list
   end
@@ -56,9 +60,7 @@ function Packer:init_ensure_plugins()
   if not state then
     local cmd = "!git clone https://github.com/wbthomason/packer.nvim " .. packer_dir
     api.nvim_command(cmd)
-    uv.fs_mkdir(data_dir .. 'lua', 511, function()
-      assert("make compile path dir faield")
-    end)
+    vim.fn.mkdir(data_dir .. 'lua', 'p')
     self:load_packer()
     packer.install()
   end
@@ -78,7 +80,8 @@ function plugins.ensure_plugins()
 end
 
 function plugins.convert_compile_file()
-  if io.open(packer_compiled, "r") == nil then
+  local input = io.open(packer_compiled, "r")
+  if not input then
     return
   end
 
@@ -95,17 +98,23 @@ function plugins.convert_compile_file()
       end
     end
   end
+  input:close()
   table.remove(lines, #lines)
 
   if vim.fn.isdirectory(data_dir .. 'lua') ~= 1 then
-    os.execute('mkdir -p ' .. data_dir .. 'lua')
+    vim.fn.mkdir(data_dir .. 'lua', 'p')
   end
 
   if vim.fn.filereadable(compile_to_lua) == 1 then
     os.remove(compile_to_lua)
   end
 
-  local file = io.open(compile_to_lua, "w")
+  local file, err = io.open(compile_to_lua, "w")
+  if not file then
+    error("Failed to write compiled file: " .. (err or "unknown error"))
+    return
+  end
+
   for _, line in ipairs(lines) do
     file:write(line)
   end
@@ -115,15 +124,36 @@ function plugins.convert_compile_file()
 end
 
 function plugins.magic_compile()
+  local current_file = vim.fn.expand("%:p")
+  if current_file == "" or not vim.fn.resolve(current_file):match(vim.fn.resolve(vim_path)) then
+    vim.notify("magic_compile: current file is not in nvim config directory", vim.log.levels.WARN)
+    return
+  end
+
+  -- Only run dofile if editing a plugin definition file
+  local should_dofile = current_file:match("plugins%.lua$")
+
+  vim.notify("Compiling plugins...", vim.log.levels.INFO)
+
+  -- Clear all config-related cached modules
   for k, _ in pairs(package.loaded) do
-    if k:match("modules") or k:match("core") or k:match("keymap") then
+    if k:match("^modules") or k:match("^core") or k:match("^keymap") or k == "_compiled" then
       package.loaded[k] = nil
     end
   end
-  dofile(vim.fn.expand("%"))
+
+  if should_dofile then
+    dofile(current_file)
+  end
+
   plugins.compile()
   plugins.convert_compile_file()
+
+  -- Clear _compiled cache again before requiring to ensure fresh load
+  package.loaded['_compiled'] = nil
   require('_compiled')
+
+  vim.notify("Plugin compilation complete!", vim.log.levels.INFO)
 end
 
 function plugins.auto_compile()
@@ -138,7 +168,7 @@ function plugins.load_compile()
   if vim.fn.filereadable(compile_to_lua) == 1 then
     require('_compiled')
   else
-    assert('Missing packer compile file Run PackerCompile Or PackerInstall to fix')
+    assert('Missing packer compile file. Run PackerCompile or PackerInstall to fix.')
   end
   vim.cmd [[command! PackerCompile lua require('core.pack').magic_compile()]]
   vim.cmd [[command! PackerInstall lua require('core.pack').install()]]
