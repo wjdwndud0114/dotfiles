@@ -15,6 +15,7 @@ local def_map = {
   ["n|[b"]         = map_cu('bn'):with_noremap(),
   ["n|<leader>sg"] = map_cmd(
   ':silent call system("open " . shellescape("https://dropbox.sourcegraphcloud.com/github.com/dropbox-internal/" . fnamemodify(getcwd(), ":t") . "/-/blob/" . expand("%:.") . "?L" . line(".")))<CR>'),
+  ["n|<C-G>"]      = map_cmd('<cmd>let @+=expand("%:.")<CR><cmd>echo "Copied: " . expand("%:.")<CR>'),
   ["n|<Space>cw"]  = map_cu([[silent! keeppatterns %substitute/\s\+$//e]]):with_noremap():with_silent(),
   ["n|<C-h>"]      = map_cmd('<C-w>h'):with_noremap(),
   ["n|<C-l>"]      = map_cmd('<C-w>l'):with_noremap(),
