@@ -13,6 +13,7 @@ local def_map = {
   ["n|[w"]         = map_cu('WhitespacePrev'):with_noremap(),
   ["n|]b"]         = map_cu('bp'):with_noremap(),
   ["n|[b"]         = map_cu('bn'):with_noremap(),
+  ["n|<C-G>"]      = map_cmd('<cmd>let @+=expand("%:.")<CR><cmd>echo "Copied: " . expand("%:.")<CR>'),
   ["n|<Space>cw"]  = map_cu([[silent! keeppatterns %substitute/\s\+$//e]]):with_noremap():with_silent(),
   ["n|<C-h>"]      = map_cmd('<C-w>h'):with_noremap(),
   ["n|<C-l>"]      = map_cmd('<C-w>l'):with_noremap(),
