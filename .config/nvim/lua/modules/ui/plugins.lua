@@ -1,25 +1,57 @@
-local ui = {}
 local conf = require('modules.ui.config')
 
-ui['ellisonleao/gruvbox.nvim'] = {
-  requires = { "rktjmp/lush.nvim" },
-  config = [[vim.cmd('colorscheme gruvbox')]],
-}
-
-ui['hoob3rt/lualine.nvim'] = {
-  requires = {
-    { 'kyazdani42/nvim-web-devicons', opt = true },
+return {
+  {
+    'ellisonleao/gruvbox.nvim',
+    lazy = false, -- Load immediately on startup
+    priority = 1000, -- Load before other plugins
+    dependencies = { 'rktjmp/lush.nvim' },
+    config = function()
+      require('gruvbox').setup({
+        terminal_colors = true,
+        undercurl = true,
+        underline = true,
+        bold = true,
+        italic = {
+          strings = true,
+          emphasis = true,
+          comments = true,
+          operators = false,
+          folds = true,
+        },
+        strikethrough = true,
+        invert_selection = false,
+        invert_signs = false,
+        invert_tabline = false,
+        invert_intend_guides = false,
+        inverse = true,
+        contrast = "",
+        palette_overrides = {},
+        overrides = {},
+        dim_inactive = false,
+        transparent_mode = false,
+      })
+      vim.cmd('colorscheme gruvbox')
+    end,
   },
-  config = conf.lualine,
-}
 
-ui['j-hui/fidget.nvim'] = {
-  config = conf.fidget
-}
+  {
+    'nvim-lualine/lualine.nvim',
+    event = 'UIEnter',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = conf.lualine,
+  },
 
-ui['lukas-reineke/indent-blankline.nvim'] = {
-  event = 'BufRead',
-  config = conf.indent_blankline,
-}
+  {
+    'j-hui/fidget.nvim',
+    event = 'LspAttach',
+    config = conf.fidget,
+  },
 
-return ui
+  {
+    'lukas-reineke/indent-blankline.nvim',
+    event = 'BufReadPost',
+    main = 'ibl',
+    config = conf.indent_blankline,
+  },
+}

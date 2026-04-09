@@ -1,10 +1,13 @@
-local func = {}
 local conf = require('modules.func.config')
 
-func['puremourning/vimspector'] = {
-  cmd = { "VimspectorInstall", "VimspectorUpdate" },
-  fn = { "vimspector#Launch()", "vimspector#ToggleBreakpoint", "vimspector#Continue" },
-  config = conf.vimspector,
+return {
+  {
+    'puremourning/vimspector',
+    cmd = { 'VimspectorInstall', 'VimspectorUpdate' },
+    keys = {
+      { '<F5>', desc = 'Vimspector' },
+      { '<F9>', desc = 'Vimspector' },
+    },
+    config = conf.vimspector,
+  },
 }
-
-return func

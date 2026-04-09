@@ -2,10 +2,6 @@ local global = require 'core.global'
 
 local enhance_attach = require('modules/completion/format').enhance_attach
 
-if not packer_plugins['lspsaga.nvim'].loaded then
-  vim.cmd [[packadd lspsaga.nvim]]
-end
-
 -- needed for some reason for line diagnostics for lspsaga
 vim.diagnostic.config({
   severity_sort = true,
@@ -133,7 +129,7 @@ vim.lsp.config('lua_ls', {
         }
       },
       diagnostics = {
-        globals = { "vim", "packer_plugins" },
+        globals = { "vim" },
         neededFileStatus = {
           ["codestyle-check"] = "Any"
         }

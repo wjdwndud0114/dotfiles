@@ -1,49 +1,65 @@
-local completion = {}
 local conf = require('modules.completion.config')
 
-completion['github/copilot.vim'] = {}
+return {
+  {
+    'github/copilot.vim',
+    event = 'VeryLazy',
+  },
 
-completion['neovim/nvim-lspconfig'] = {
-  after = 'cmp-nvim-lsp',
-  config = conf.nvim_lsp,
+  {
+    'williamboman/mason.nvim',
+    lazy = false, -- Load immediately to ensure LSP servers available
+    config = conf.mason_nvim,
+  },
+
+  {
+    'williamboman/mason-lspconfig.nvim',
+    lazy = false,
+    dependencies = { 'mason.nvim' },
+    config = conf.mason_lspconfig,
+  },
+
+  {
+    'neovim/nvim-lspconfig',
+    event = 'BufReadPost',
+    dependencies = {
+      'mason.nvim',
+      'mason-lspconfig.nvim',
+      'hrsh7th/cmp-nvim-lsp',
+    },
+    config = conf.nvim_lsp,
+  },
+
+  {
+    'glepnir/lspsaga.nvim',
+    cmd = 'Lspsaga',
+  },
+
+  {
+    'L3MON4D3/LuaSnip',
+    event = 'InsertEnter',
+    build = vim.fn.executable('make') == 1 and 'make install_jsregexp' or nil,
+  },
+
+  {
+    'hrsh7th/nvim-cmp',
+    event = 'InsertEnter',
+    dependencies = {
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-nvim-lsp',
+      'saadparwaiz1/cmp_luasnip',
+      'L3MON4D3/LuaSnip',
+    },
+    config = conf.nvim_cmp,
+  },
+
+  {
+    'nvimtools/none-ls.nvim',
+    event = 'LspAttach',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvimtools/none-ls-extras.nvim',
+    },
+    config = conf.null_ls,
+  },
 }
-
-completion['williamboman/mason.nvim'] = {
-  cmd = { 'LspInstall', 'LspUninstall', 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog' },
-  config = conf.mason_nvim,
-}
-
-completion['williamboman/mason-lspconfig.nvim'] = {
-  after = 'mason.nvim',
-  cmd = { 'LspInstall', 'LspUninstall', 'Mason', 'MasonInstall', 'MasonUninstall', 'MasonUninstallAll', 'MasonLog' },
-  config = conf.mason_lspconfig,
-}
-
-completion['glepnir/lspsaga.nvim'] = {
-  cmd = 'Lspsaga',
-}
-
-completion['L3MON4D3/LuaSnip'] = {}
-
-completion['hrsh7th/nvim-cmp'] = {
-  event = 'BufReadPre',
-  -- event = 'InsertEnter',
-  config = conf.nvim_cmp,
-  requires = {
-    { 'hrsh7th/cmp-buffer',       after = 'nvim-cmp' },
-    { 'hrsh7th/cmp-nvim-lsp',     after = 'nvim-cmp' },
-    { 'saadparwaiz1/cmp_luasnip', after = 'nvim-cmp', opt = true },
-  }
-}
-
-completion['nvimtools/none-ls-extras.nvim'] = {
-  before = 'nvimtools/none-ls.nvim',
-}
-
-completion['nvimtools/none-ls.nvim'] = {
-  event = 'BufReadPost',
-  config = conf.null_ls,
-  requires = { { "nvim-lua/plenary.nvim" } },
-}
-
-return completion

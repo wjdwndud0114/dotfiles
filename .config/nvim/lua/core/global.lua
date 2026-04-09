@@ -1,20 +1,18 @@
-local global   = {}
-local home     = os.getenv("HOME")
-local path_sep = global.is_windows and '\\' or '/'
-local os_name  = vim.loop.os_uname().sysname
+local os_name = vim.loop.os_uname().sysname
+local path_sep = vim.loop.os_uname().sysname == 'Windows' and '\\' or '/'
 
-function global:load_variables()
-  self.is_mac      = os_name == 'Darwin'
-  self.is_linux    = os_name == 'Linux'
-  self.is_windows  = os_name == 'Windows'
-  self.vim_path    = vim.fn.stdpath('config')
-  self.cache_dir   = home .. path_sep .. '.cache' .. path_sep .. 'nvim' .. path_sep
-  self.modules_dir = self.vim_path .. path_sep .. 'lua' .. path_sep .. 'modules'
-  self.path_sep    = path_sep
-  self.home        = home
-  self.data_dir    = string.format('%s/site/', vim.fn.stdpath('data'))
-end
+local global = {
+  is_mac = os_name == 'Darwin',
+  is_linux = os_name == 'Linux',
+  is_windows = os_name == 'Windows',
+  vim_path = vim.fn.stdpath('config'),
+  cache_dir = vim.fn.stdpath('cache') .. path_sep,
+  data_dir = vim.fn.stdpath('data') .. path_sep,
+  path_sep = path_sep,
+  home = vim.loop.os_homedir(),
+}
 
-global:load_variables()
+-- Derived paths
+global.modules_dir = global.vim_path .. path_sep .. 'lua' .. path_sep .. 'modules'
 
 return global
