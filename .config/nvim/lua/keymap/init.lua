@@ -63,7 +63,6 @@ local plug_map = {
   ["n|<Leader>t"]             = map_cu('FzfLua tabs'):with_noremap():with_silent(),
   ["n|<Leader><Leader><C-p>"] = map_cu('FzfLua files'):with_noremap():with_silent(),
   ["n|<Leader>h"]             = map_cu('FzfLua oldfiles'):with_noremap():with_silent(),
-  ["n|<Leader>b"]             = map_cu('FzfLua buffers'):with_noremap():with_silent(),
   -- ["n|<Leader><Leader>s"]     = map_cu('FzfLua grep'):with_noremap():with_silent(),
   -- Plugin Telescope
   -- ["n|<Leader>bb"]     = map_cu('Telescope buffers'):with_noremap():with_silent(),

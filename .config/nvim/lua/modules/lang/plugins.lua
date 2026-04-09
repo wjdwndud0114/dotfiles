@@ -1,21 +1,26 @@
-local lang = {}
 local conf = require('modules.lang.config')
 
-lang['nvim-treesitter/nvim-treesitter'] = {
-  config = conf.nvim_treesitter,
-  build = ':TSUpdate',
-  branch = 'main',
-}
+return {
+  {
+    'nvim-treesitter/nvim-treesitter',
+    event = { 'BufReadPost', 'BufNewFile' },
+    build = ':TSUpdate',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+    },
+    config = conf.nvim_treesitter,
+  },
 
-lang['nvim-treesitter/nvim-treesitter-textobjects'] = {
-  after = 'nvim-treesitter',
-  config = conf.nvim_treesitter_textobjects,
-  branch = 'main',
-}
+  {
+    'nvim-treesitter/nvim-treesitter-textobjects',
+    lazy = true,
+    config = conf.nvim_treesitter_textobjects,
+  },
 
-lang['MeanderingProgrammer/render-markdown.nvim'] = {
-  after = { 'nvim-treesitter' },
-  config = conf.render_markdown,
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    ft = 'markdown',
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    config = conf.render_markdown,
+  },
 }
-
-return lang

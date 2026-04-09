@@ -45,8 +45,6 @@ function config.nvim_cmp()
 end
 
 function config.null_ls()
-  -- hack to make this work for new nvim version
-  vim.lsp._request_name_to_capability = vim.lsp.protocol._request_name_to_capability
   local null_ls = require('null-ls')
 
   null_ls.setup({
@@ -62,25 +60,6 @@ function config.null_ls()
       require('none-ls.formatting.eslint_d').with({
         prefer_local = "node_modules/.bin",
       }),
-      null_ls.builtins.formatting.prettierd,
-      -- null_ls.builtins.code_actions.gitsigns,
-
-      -- C/C++
-      -- Formatting is handled by clangd language server
-      -- null_ls.builtins.formatting.clang_format,
-
-      -- Markdown
-      -- null_ls.builtins.diagnostics.markdownlint,
-
-      -- Lua
-      -- cargo install stylua
-      -- add ~/.cargo/bin to PATH
-      -- null_ls.builtins.formatting.stylua,
-
-      -- Spell checking
-      -- null_ls.builtins.diagnostics.codespell.with({
-      --   args = { "--builtin", "clear,rare,code", "-" },
-      -- }),
     },
   })
 end

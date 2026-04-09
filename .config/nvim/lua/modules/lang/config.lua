@@ -1,17 +1,21 @@
 local config = {}
 
 function config.nvim_treesitter()
-  -- vim.api.nvim_command('set foldmethod=expr')
-  -- vim.api.nvim_command('set foldexpr=nvim_treesitter#foldexpr()')
-  local filetypes = {
+  local parsers = {
     "markdown", "markdown_inline", "bash", "comment", "css", "dockerfile", "go", "graphql", "html",
     "http", "java", "javascript",
     "jsdoc", "json", "json5", "latex", "lua", "make", "perl", "python", "regex", "ruby", "rust", "scss", "tsx",
     "typescript", "vim", "yaml"
   }
-  require('nvim-treesitter').install(filetypes)
+  require('nvim-treesitter').install(parsers)
 
-  local autocmd_filetypes = vim.list_extend(vim.deepcopy(filetypes), { "typescriptreact" })
+  -- Add nvim-treesitter runtime to runtimepath for queries
+  local ts_runtime = vim.fn.stdpath('data') .. '/lazy/nvim-treesitter/runtime'
+  if vim.fn.isdirectory(ts_runtime) == 1 then
+    vim.opt.runtimepath:prepend(ts_runtime)
+  end
+
+  local autocmd_filetypes = vim.list_extend(vim.deepcopy(parsers), { "typescriptreact" })
 
   vim.api.nvim_create_autocmd('FileType', {
     pattern = autocmd_filetypes,
