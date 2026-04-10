@@ -22,7 +22,6 @@ local function load_core()
   require('core.mapping')
   require('keymap')
   require('core.event')
-  require('core.filetype')
 
   -- Setup lazy.nvim
   require('core.lazy').setup()
