@@ -76,8 +76,33 @@ function config.fzf_lua()
   end, { noremap = true })
 
   vim.keymap.set('n', '<leader>s', function()
-    fzf.live_grep()
-  end, { noremap = true, desc = 'Live grep (Ctrl-G to toggle)' })
+    local sg = require('modules.editor.sg_grep')
+    local libuv = require('fzf-lua.libuv')
+    fzf.live_grep({
+      rg_glob = false,
+      fn_transform_cmd = sg.fn_transform_cmd,
+      header = sg.header_for(''),
+      fzf_cli_args = {
+        '--bind=' .. libuv.shellescape('change:transform-header:' .. sg.header_shell_cmd()),
+      },
+    })
+  end, { noremap = true, desc = 'Sourcegraph-style grep (f:, -f:, lang:, case:, content:)' })
+
+  vim.keymap.set('n', '<leader><leader>s', function()
+    local sg = require('modules.editor.sg_grep')
+    local libuv = require('fzf-lua.libuv')
+    local dir = vim.api.nvim_eval("expand('%:p:~:.:h')")
+    fzf.live_grep({
+      cwd = dir,
+      prompt = vim.fn.pathshorten(dir) .. '> ',
+      rg_glob = false,
+      fn_transform_cmd = sg.fn_transform_cmd,
+      header = sg.header_for(''),
+      fzf_cli_args = {
+        '--bind=' .. libuv.shellescape('change:transform-header:' .. sg.header_shell_cmd()),
+      },
+    })
+  end, { noremap = true, desc = 'Sourcegraph-style grep in current file directory' })
 
   vim.keymap.set('n', '<leader>b', function()
     fzf.buffers()
