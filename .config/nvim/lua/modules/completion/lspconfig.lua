@@ -204,6 +204,22 @@ vim.lsp.config('bashls', {
   capabilities = capabilities
 })
 
+-- Configure markdown_oxide
+local markdown_oxide_capabilities = vim.tbl_deep_extend('force', capabilities, {
+  workspace = {
+    didChangeWatchedFiles = {
+      dynamicRegistration = true,
+    },
+  },
+})
+
+vim.lsp.config('markdown_oxide', {
+  cmd = { servers_root .. 'markdown-oxide' },
+  filetypes = { 'markdown' },
+  root_markers = { '.moxide.toml', '.obsidian', '.git' },
+  capabilities = markdown_oxide_capabilities,
+})
+
 -- Enable all configured LSP servers
 vim.lsp.enable({
   'gopls',
@@ -212,6 +228,7 @@ vim.lsp.enable({
   'ts_ls',
   'pyright',
   'bashls',
+  'markdown_oxide',
 })
 
 -- Fix: Attach LSP to buffers that were opened before LSP was enabled
