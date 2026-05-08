@@ -49,6 +49,24 @@ function config.fzf_lua()
   local fzf = require('fzf-lua')
   fzf.register_ui_select()
 
+  local sg = require('modules.editor.sg_grep')
+  sg.setup()
+
+  local function sg_live_grep_opts(extra)
+    local libuv = require('fzf-lua.libuv')
+    local opts = vim.tbl_extend('force', {
+      rg_glob = false,
+      fn_transform_cmd = sg.fn_transform_cmd,
+      header = sg.header_for(''),
+      fzf_cli_args = {
+        '--bind=' .. libuv.shellescape('change:transform-header:' .. sg.header_shell_cmd()),
+        '--bind=' .. libuv.shellescape('alt-?:transform-header:' .. sg.help_shell_cmd()),
+        '--bind=' .. libuv.shellescape('result:transform-header:' .. sg.header_shell_cmd()),
+      },
+    }, extra or {})
+    return opts
+  end
+
   vim.keymap.set('n', '<C-p>', function()
     fzf.fzf_exec('fd -H --type f --strip-cwd-prefix | ~/.dotfiles/file-web-devicon', {
       actions = fzf.defaults.actions.files,
@@ -76,32 +94,15 @@ function config.fzf_lua()
   end, { noremap = true })
 
   vim.keymap.set('n', '<leader>s', function()
-    local sg = require('modules.editor.sg_grep')
-    local libuv = require('fzf-lua.libuv')
-    fzf.live_grep({
-      rg_glob = false,
-      fn_transform_cmd = sg.fn_transform_cmd,
-      header = sg.header_for(''),
-      fzf_cli_args = {
-        '--bind=' .. libuv.shellescape('change:transform-header:' .. sg.header_shell_cmd()),
-      },
-    })
-  end, { noremap = true, desc = 'Sourcegraph-style grep (f:, -f:, lang:, case:, content:)' })
+    fzf.live_grep(sg_live_grep_opts())
+  end, { noremap = true, desc = 'Sourcegraph-style grep (f: l: d: w: c:, alt-? help)' })
 
   vim.keymap.set('n', '<leader><leader>s', function()
-    local sg = require('modules.editor.sg_grep')
-    local libuv = require('fzf-lua.libuv')
     local dir = vim.api.nvim_eval("expand('%:p:~:.:h')")
-    fzf.live_grep({
+    fzf.live_grep(sg_live_grep_opts({
       cwd = dir,
       prompt = vim.fn.pathshorten(dir) .. '> ',
-      rg_glob = false,
-      fn_transform_cmd = sg.fn_transform_cmd,
-      header = sg.header_for(''),
-      fzf_cli_args = {
-        '--bind=' .. libuv.shellescape('change:transform-header:' .. sg.header_shell_cmd()),
-      },
-    })
+    }))
   end, { noremap = true, desc = 'Sourcegraph-style grep in current file directory' })
 
   vim.keymap.set('n', '<leader>b', function()
