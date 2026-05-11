@@ -159,13 +159,38 @@ return function(query, cmd, _opts)
   local pattern_parts = {}
   local case_sensitive = false
 
+  -- Wrap a user-supplied path fragment as a gitignore-style glob.
+  -- - already contains *? : leave alone
+  -- - contains /          : "**/<v>/**" so directory prefix matches anywhere
+  -- - bare filename       : "*<v>*" so it matches anywhere in a basename
+  local function path_glob(v)
+    if v:find("[*?]") then return v end
+    if v:find("/") then
+      v = v:gsub("/+$", "")
+      return "**/" .. v .. "/**"
+    end
+    return "*" .. v .. "*"
+  end
+  -- Companion: convert a path glob into one that ALSO restricts to specific
+  -- file extensions (used when both f: and l: are present).
+  local function path_glob_with_exts(v, ext_group)
+    if v:find("[*?]") then
+      -- User supplied their own pattern; stick the ext group on the end.
+      local stripped = v:gsub("%%*+$", "")
+      return stripped .. "." .. ext_group
+    end
+    if v:find("/") then
+      v = v:gsub("/+$", "")
+      return "**/" .. v .. "/**/*." .. ext_group
+    end
+    return "*" .. v .. "." .. ext_group
+  end
+
   for _, tok in ipairs(tokenize(query)) do
     local kind, val = classify(tok)
     if kind == "path" and val ~= "" then
-      local glob = val
-      if not glob:find("[*?]") then glob = "*" .. glob .. "*" end
-      if tok.negate then path_excl[#path_excl + 1] = glob
-      else path_incl[#path_incl + 1] = glob end
+      if tok.negate then path_excl[#path_excl + 1] = val
+      else path_incl[#path_incl + 1] = val end
     elseif kind == "lang" and val ~= "" then
       if tok.negate then lang_excl[#lang_excl + 1] = val:lower()
       else lang_incl[#lang_incl + 1] = val:lower() end
@@ -199,22 +224,21 @@ return function(query, cmd, _opts)
   if #path_incl > 0 and #incl_exts > 0 then
     local ext_group = "{" .. table.concat(incl_exts, ",") .. "}"
     for _, p in ipairs(path_incl) do
-      local base = p:gsub("%%*+$", "")
-      args[#args + 1] = "--iglob=" .. shellescape(base .. "." .. ext_group)
+      args[#args + 1] = "--iglob=" .. shellescape(path_glob_with_exts(p, ext_group))
     end
   elseif #incl_exts > 0 then
     local ext_group = "{" .. table.concat(incl_exts, ",") .. "}"
     args[#args + 1] = "--iglob=" .. shellescape("*." .. ext_group)
   else
     for _, p in ipairs(path_incl) do
-      args[#args + 1] = "--iglob=" .. shellescape(p)
+      args[#args + 1] = "--iglob=" .. shellescape(path_glob(p))
     end
   end
   for _, lang in ipairs(unknown_incl_langs) do
     args[#args + 1] = "--type=" .. shellescape(lang)
   end
   for _, p in ipairs(path_excl) do
-    args[#args + 1] = "--iglob=" .. shellescape("!" .. p)
+    args[#args + 1] = "--iglob=" .. shellescape("!" .. path_glob(p))
   end
   for _, lang in ipairs(lang_excl) do
     local exts = LANG_EXTS[lang]
@@ -331,23 +355,61 @@ local HINT_LONG = table.concat({
   C.dim .. "  alt-? toggles this help" .. C.reset,
 }, "\n")
 
+-- Soft-wrap a string at word boundaries to a max line width.
+local function wrap(text, width)
+  local lines, line = {}, ""
+  for word in text:gmatch("%S+") do
+    if line == "" then
+      line = word
+    elseif #line + 1 + #word <= width then
+      line = line .. " " .. word
+    else
+      lines[#lines + 1] = line
+      line = word
+    end
+  end
+  if line ~= "" then lines[#lines + 1] = line end
+  return lines
+end
+
 local function read_stderr(path)
   if not path or path == "" then return nil end
   local f = io.open(path, "rb")
   if not f then return nil end
   local content = f:read("*a") or ""
   f:close()
-  -- rg writes errors immediately; keep only the first error line for brevity.
-  local first = content:match("[^\n]+")
-  return first
+  if content == "" then return nil end
+  -- Drop rg's noisy "Running with --debug..." advisory; keep meaningful lines.
+  content = content:gsub("Running with %-%-debug[^\n]*\n?", "")
+  content = content:gsub("^%s+", ""):gsub("%s+$", "")
+  if content == "" then return nil end
+  return content
+end
+
+local function format_err(err, width)
+  if not err then return nil end
+  local out = {}
+  for raw_line in (err .. "\n"):gmatch("([^\n]*)\n") do
+    if raw_line ~= "" then
+      for _, w in ipairs(wrap(raw_line, math.max(20, width - 2))) do
+        out[#out + 1] = C.err .. (#out == 0 and "! " or "  ") .. w .. C.reset
+      end
+    end
+  end
+  return table.concat(out, "\n")
 end
 
 function M.header_for(query, opts)
   opts = opts or {}
+  local width = opts.width
+      or tonumber(os.getenv("FZF_COLUMNS"))
+      or tonumber(os.getenv("COLUMNS"))
+      or 100
   local err
   if opts.stderr_file then err = read_stderr(opts.stderr_file) end
+  local err_block = format_err(err, width)
   if opts.long then
-    return (err and (C.err .. "! " .. err .. C.reset .. "\n") or "") .. HINT_LONG
+    return (err_block and (err_block .. "\n") or "") .. HINT_LONG
   end
   local base
   if not query or query == "" then
@@ -365,8 +427,8 @@ function M.header_for(query, opts)
     end
     base = table.concat(parts, " ")
   end
-  if err then
-    return C.err .. "! " .. err .. C.reset .. "\n" .. base
+  if err_block then
+    return err_block .. "\n" .. base
   end
   return base
 end

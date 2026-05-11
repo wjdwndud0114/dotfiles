@@ -62,6 +62,7 @@ function config.fzf_lua()
         '--bind=' .. libuv.shellescape('change:transform-header:' .. sg.header_shell_cmd()),
         '--bind=' .. libuv.shellescape('alt-?:transform-header:' .. sg.help_shell_cmd()),
         '--bind=' .. libuv.shellescape('result:transform-header:' .. sg.header_shell_cmd()),
+        '--bind=' .. libuv.shellescape('resize:transform-header:' .. sg.header_shell_cmd()),
       },
     }, extra or {})
     return opts
