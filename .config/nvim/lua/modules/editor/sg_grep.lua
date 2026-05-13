@@ -159,31 +159,34 @@ return function(query, cmd, _opts)
   local pattern_parts = {}
   local case_sensitive = false
 
-  -- Wrap a user-supplied path fragment as a gitignore-style glob.
+  -- Wrap a user-supplied path fragment as gitignore-style glob(s). Returns
+  -- a list — rg's --iglob matches against the basename when the pattern has
+  -- no slash, so a bare token needs two globs (dir-component + basename)
+  -- to find both "docs/a.md" and "mydocs.md". rg unions positive globs.
   -- - already contains *? : leave alone
   -- - contains /          : "**/<v>/**" so directory prefix matches anywhere
-  -- - bare filename       : "*<v>*" so it matches anywhere in a basename
-  local function path_glob(v)
-    if v:find("[*?]") then return v end
+  -- - bare filename       : { "**/*<v>*/**", "*<v>*" }
+  local function path_globs(v)
+    if v:find("[*?]") then return { v } end
     if v:find("/") then
       v = v:gsub("/+$", "")
-      return "**/" .. v .. "/**"
+      return { "**/" .. v .. "/**" }
     end
-    return "*" .. v .. "*"
+    return { "**/*" .. v .. "*/**", "*" .. v .. "*" }
   end
-  -- Companion: convert a path glob into one that ALSO restricts to specific
-  -- file extensions (used when both f: and l: are present).
-  local function path_glob_with_exts(v, ext_group)
+  -- Companion: same shape but also restricts to specific file extensions
+  -- (used when both f: and l: are present so the ext constraint ANDs).
+  local function path_globs_with_exts(v, ext_group)
     if v:find("[*?]") then
       -- User supplied their own pattern; stick the ext group on the end.
       local stripped = v:gsub("%%*+$", "")
-      return stripped .. "." .. ext_group
+      return { stripped .. "." .. ext_group }
     end
     if v:find("/") then
       v = v:gsub("/+$", "")
-      return "**/" .. v .. "/**/*." .. ext_group
+      return { "**/" .. v .. "/**/*." .. ext_group }
     end
-    return "*" .. v .. "." .. ext_group
+    return { "**/*" .. v .. "*/**/*." .. ext_group, "*" .. v .. "*." .. ext_group }
   end
 
   for _, tok in ipairs(tokenize(query)) do
@@ -224,21 +227,27 @@ return function(query, cmd, _opts)
   if #path_incl > 0 and #incl_exts > 0 then
     local ext_group = "{" .. table.concat(incl_exts, ",") .. "}"
     for _, p in ipairs(path_incl) do
-      args[#args + 1] = "--iglob=" .. shellescape(path_glob_with_exts(p, ext_group))
+      for _, g in ipairs(path_globs_with_exts(p, ext_group)) do
+        args[#args + 1] = "--iglob=" .. shellescape(g)
+      end
     end
   elseif #incl_exts > 0 then
     local ext_group = "{" .. table.concat(incl_exts, ",") .. "}"
     args[#args + 1] = "--iglob=" .. shellescape("*." .. ext_group)
   else
     for _, p in ipairs(path_incl) do
-      args[#args + 1] = "--iglob=" .. shellescape(path_glob(p))
+      for _, g in ipairs(path_globs(p)) do
+        args[#args + 1] = "--iglob=" .. shellescape(g)
+      end
     end
   end
   for _, lang in ipairs(unknown_incl_langs) do
     args[#args + 1] = "--type=" .. shellescape(lang)
   end
   for _, p in ipairs(path_excl) do
-    args[#args + 1] = "--iglob=" .. shellescape("!" .. path_glob(p))
+    for _, g in ipairs(path_globs(p)) do
+      args[#args + 1] = "--iglob=" .. shellescape("!" .. g)
+    end
   end
   for _, lang in ipairs(lang_excl) do
     local exts = LANG_EXTS[lang]
