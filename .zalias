@@ -14,6 +14,7 @@ alias gpu='git pull'
 alias gb='git branch'
 alias gm='git merge'
 alias gcp='git cherry-pick'
+alias gw='git worktree'
 alias g='git'
 
 alias geu='nvim "+/<<<<<<<" `g ls-files --unmerged | cut -f2 | sort -u`'
