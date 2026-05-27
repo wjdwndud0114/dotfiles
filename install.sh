@@ -35,6 +35,7 @@ brew install tmux
 brew install eza
 brew install git-delta
 brew install lnav
+brew install tree-sitter-cli
 
 # tmux plugins
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
