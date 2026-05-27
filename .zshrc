@@ -55,7 +55,7 @@ fi
 
 # FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-export FZF_DEFAULT_OPS="--extended"
+export FZF_DEFAULT_OPTS="--extended"
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 export FZF_CTRL_T_COMMAND="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}'"
 alias f="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}' | fzf"
