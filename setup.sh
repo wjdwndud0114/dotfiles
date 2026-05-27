@@ -20,8 +20,11 @@ if [[ $? != 0 ]] ; then
     NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
-# Restart shell to have the brew install/update
-# exec "$SHELL"
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
+  eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+fi
 
 brew install fzf
 $(brew --prefix)/opt/fzf/install
@@ -31,7 +34,7 @@ brew install nvim
 brew install tmux
 brew install eza
 brew install git-delta
-brew install lvav
+brew install lnav
 
 # tmux plugins
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
