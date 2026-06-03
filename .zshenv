@@ -10,3 +10,4 @@ fi
 if [ -f ~/.zalias-dbx ]; then
     . ~/.zalias-dbx
 fi
+. "$HOME/.cargo/env"
