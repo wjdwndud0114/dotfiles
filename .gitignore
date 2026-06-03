@@ -1,0 +1,6 @@
+# Source clone for the file-web-devicon binary (its own git repo); the built
+# binary is committed at ./file-web-devicon.
+/file-web-devicons/
+
+# Symlink-replacement backups created by install.sh
+*.bak.*
