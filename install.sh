@@ -86,7 +86,9 @@ echo "Installing nvm..."
 export NVM_DIR="$HOME/.config/nvm"
 if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
   mkdir -p "$NVM_DIR"
-  curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+  # PROFILE=/dev/null stops nvm's installer from appending its own init block
+  # to ~/.zshrc — .zshrc already sources $NVM_DIR/nvm.sh.
+  PROFILE=/dev/null curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 fi
 
 echo "Setting up TERM with xterm-256color-italic..."
