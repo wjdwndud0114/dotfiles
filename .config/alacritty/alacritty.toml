@@ -21,4 +21,4 @@ decorations = "full"
 
 [general]
 live_config_reload = true
-import = ["/Users/kevin/.config/alacritty/dracula.toml"]
+import = ["~/.config/alacritty/dracula.toml"]
