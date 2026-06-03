@@ -45,6 +45,7 @@ znap prompt sindresorhus/pure
 znap source zdharma-continuum/fast-syntax-highlighting
 znap source marlonrichert/zsh-autocomplete
 znap source zsh-users/zsh-completions
+znap source wjdwndud0114/zsh_codex
 
 # brew
 if [[ -x /opt/homebrew/bin/brew ]]; then
@@ -80,3 +81,33 @@ export NODE_OPTIONS="--max-old-space-size=4096"
 export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# vi mode
+# zsh already auto-selects vi mode from $EDITOR (nvim), but make it explicit.
+bindkey -v
+export KEYTIMEOUT=20            # 200ms Esc lag instead of the 400ms default
+
+# Re-assert custom insert-mode binds (bindkey -v reinitializes the main keymap).
+bindkey '^x'    create_completion          # zsh_codex
+bindkey '^[[A'  fzf-history-widget         # up arrow -> fzf history
+
+# Sensible insert-mode keys that vanilla vi mode omits.
+bindkey '^?' backward-delete-char          # backspace deletes past insert point
+bindkey '^w' backward-kill-word
+bindkey '^r' history-incremental-search-backward
+
+# k/j search history in normal mode
+bindkey -M vicmd 'k' up-line-or-search
+bindkey -M vicmd 'j' down-line-or-search
+
+# Cursor shape: block in normal mode, beam in insert mode.
+# add-zle-hook-widget appends rather than replacing the plugins' own hooks.
+autoload -Uz add-zle-hook-widget
+_vi_cursor_shape() {
+  case ${KEYMAP:-main} in
+    vicmd)       printf '\e[2 q' ;;   # block
+    main|viins)  printf '\e[6 q' ;;   # beam
+  esac
+}
+add-zle-hook-widget keymap-select _vi_cursor_shape
+add-zle-hook-widget line-init     _vi_cursor_shape
