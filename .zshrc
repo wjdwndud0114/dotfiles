@@ -111,3 +111,8 @@ _vi_cursor_shape() {
 }
 add-zle-hook-widget keymap-select _vi_cursor_shape
 add-zle-hook-widget line-init     _vi_cursor_shape
+
+# >>> harness-engineering setup.sh >>>
+export HARNESS_DIR="/Users/kevinj/src/misc/harness-engineering"
+alias cl='claude --permission-mode dontAsk --model "global.anthropic.claude-opus-4-8[1m]" --effort max'
+# <<< harness-engineering setup.sh <<<
