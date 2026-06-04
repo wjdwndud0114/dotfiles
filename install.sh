@@ -35,6 +35,13 @@ for file in "$DIR"/.config/*; do
   link "$file" "$HOME/.config/$(basename "$file")"
 done
 
+# cmux's terminal theme/font live in a Ghostty config under Application Support,
+# separate from ~/.config/cmux/cmux.json (which only holds app-behavior overrides).
+CMUX_SUPPORT="$HOME/Library/Application Support/com.cmuxterm.app"
+if [[ -d "$CMUX_SUPPORT" ]]; then
+  link "$DIR/cmux/config.ghostty" "$CMUX_SUPPORT/config.ghostty"
+fi
+
 echo "Installing Homebrew..."
 if ! command -v brew >/dev/null 2>&1; then
   NONINTERACTIVE=1 /bin/bash -c \
