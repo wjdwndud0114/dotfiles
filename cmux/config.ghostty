@@ -1,0 +1,7 @@
+# cmux themes start
+theme = light:Dracula,dark:Dracula
+# cmux themes end
+
+font-family = "RobotoMono Nerd Font"
+font-size = 15.5
+copy-on-select = clipboard
