@@ -60,19 +60,21 @@ brew bundle --file="$DIR/Brewfile"
 "$(brew --prefix)/opt/fzf/install" --key-bindings --completion --no-update-rc
 
 echo "Installing tmux plugins..."
-declare -A TMUX_PLUGINS=(
-  [tpm]="https://github.com/tmux-plugins/tpm"
-  [tmux-sensible]="https://github.com/tmux-plugins/tmux-sensible"
-  [tmux-onedark-theme]="https://github.com/odedlaz/tmux-onedark-theme"
-  [tmux-window-name]="https://github.com/ofirgall/tmux-window-name"
+# Plain list (not an associative array) so this runs on macOS's bash 3.2.
+# Each plugin's dir name is just the basename of its repo URL.
+TMUX_PLUGINS=(
+  "https://github.com/tmux-plugins/tpm"
+  "https://github.com/tmux-plugins/tmux-sensible"
+  "https://github.com/odedlaz/tmux-onedark-theme"
+  "https://github.com/ofirgall/tmux-window-name"
 )
 mkdir -p ~/.tmux/plugins
-for name in "${!TMUX_PLUGINS[@]}"; do
-  dest="$HOME/.tmux/plugins/$name"
+for url in "${TMUX_PLUGINS[@]}"; do
+  dest="$HOME/.tmux/plugins/$(basename "$url")"
   if [[ -d "$dest/.git" ]]; then
     git -C "$dest" pull --ff-only --quiet || true
   else
-    git clone --depth 1 "${TMUX_PLUGINS[$name]}" "$dest"
+    git clone --depth 1 "$url" "$dest"
   fi
 done
 # tmux-window-name needs libtmux (dataclasses ships with Python 3.7+).

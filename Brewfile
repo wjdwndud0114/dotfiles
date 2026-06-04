@@ -16,7 +16,6 @@ brew "jq"                # JSON processor
 brew "gh"                # GitHub CLI
 
 # Terminals
-cask "alacritty"         # GPU terminal
 cask "cmux"              # AI-agent terminal with vertical tabs
 
 # Fonts (homebrew/cask-fonts tap was deprecated — fonts now live in the main cask repo)
