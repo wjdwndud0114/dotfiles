@@ -5,3 +5,16 @@ theme = light:Dracula,dark:Dracula
 font-family = "RobotoMono Nerd Font"
 font-size = 15.5
 copy-on-select = clipboard
+macos-option-as-alt = true
+
+keybind = alt+h=goto_split:left
+keybind = alt+arrow_left=goto_split:left
+keybind = alt+j=goto_split:down
+keybind = alt+arrow_down=goto_split:down
+keybind = alt+k=goto_split:up
+keybind = alt+arrow_up=goto_split:up
+keybind = alt+l=goto_split:right
+keybind = alt+arrow_right=goto_split:right
+
+keybind = alt+shift+h=previous_tab
+keybind = alt+shift+l=next_tab
