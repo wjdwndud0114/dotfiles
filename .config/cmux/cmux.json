@@ -258,4 +258,22 @@
   //       "quit" : "cmd+q"
   //     }
   //   },
+
+  "shortcuts": {
+    "bindings": {
+      "splitRight": ["ctrl+b", "v"],
+      "splitDown": ["ctrl+b", "s"],
+      "newSurface": ["ctrl+b", "c"],
+      "closeTab": ["ctrl+b", "x"],
+      "toggleSplitZoom": ["ctrl+b", "z"],
+      "toggleTerminalCopyMode": ["ctrl+b", "["],
+      "focusLeft": "opt+h",
+      "focusDown": "opt+j",
+      "focusUp": "opt+k",
+      "focusRight": "opt+l",
+      "prevSurface": "shift+left",
+      "nextSurface": "shift+right",
+      "reloadConfiguration": ["ctrl+b", "r"]
+    }
+  }
 }
