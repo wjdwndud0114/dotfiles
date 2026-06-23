@@ -89,7 +89,12 @@ export KEYTIMEOUT=20            # 200ms Esc lag instead of the 400ms default
 
 # Re-assert custom insert-mode binds (bindkey -v reinitializes the main keymap).
 bindkey '^x'    create_completion          # zsh_codex
-bindkey '^[[A'  fzf-history-widget         # up arrow -> fzf history
+bindkey '^[[A'  fzf-history-widget         # up arrow -> fzf history (normal cursor mode)
+# On Linux, /etc/zsh/zshrc installs a zle-line-init that emits terminfo[smkx],
+# putting the terminal in application cursor mode so the up arrow sends ^[OA
+# instead of ^[[A. add-zle-hook-widget (below) keeps that widget alive, so bind
+# the application-mode sequence too. (macOS has no /etc/zsh/zshrc, so it's a no-op there.)
+bindkey '^[OA'  fzf-history-widget         # up arrow -> fzf history (application cursor mode)
 
 # Sensible insert-mode keys that vanilla vi mode omits.
 bindkey '^?' backward-delete-char          # backspace deletes past insert point
