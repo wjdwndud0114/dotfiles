@@ -1,8 +1,6 @@
 export CACHEDIR="$HOME/.local/share"
 [[ -d "$CACHEDIR" ]] || mkdir -p "$CACHEDIR"
 
-command -v nvim >/dev/null && export EDITOR=nvim VISUAL=nvim
-
 # Smart URLs.
 autoload -Uz url-quote-magic
 zle -N self-insert url-quote-magic
@@ -53,6 +51,9 @@ if [[ -x /opt/homebrew/bin/brew ]]; then
 elif [[ -x /home/linuxbrew/.linuxbrew/bin/brew ]]; then
   eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
+
+# Editor — set after brew is on PATH so nvim resolves on Linux too.
+command -v nvim >/dev/null && export EDITOR=nvim VISUAL=nvim
 
 # FZF
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
