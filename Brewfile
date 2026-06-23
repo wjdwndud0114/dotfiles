@@ -14,6 +14,7 @@ brew "lnav"              # log file navigator
 brew "tree-sitter-cli"   # tree-sitter parser tooling
 brew "jq"                # JSON processor
 brew "gh"                # GitHub CLI
+brew "shellcheck"        # shell script linter
 
 # Terminals
 cask "alacritty"         # GPU terminal
