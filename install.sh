@@ -16,7 +16,8 @@ link() {
   if [[ -L "$dest" ]]; then
     rm -f "$dest"
   elif [[ -e "$dest" ]]; then
-    local backup="$dest.bak.$(date +%Y%m%d%H%M%S)"
+    local backup
+    backup="$dest.bak.$(date +%Y%m%d%H%M%S)"
     echo "  backing up existing $dest -> $backup"
     mv "$dest" "$backup"
   fi
