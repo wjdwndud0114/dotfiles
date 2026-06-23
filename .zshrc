@@ -1,7 +1,7 @@
 export CACHEDIR="$HOME/.local/share"
 [[ -d "$CACHEDIR" ]] || mkdir -p "$CACHEDIR"
 
-export EDITOR=$(which nvim)
+command -v nvim >/dev/null && export EDITOR=nvim VISUAL=nvim
 
 # Smart URLs.
 autoload -Uz url-quote-magic
@@ -20,7 +20,7 @@ unsetopt bg_nice                # Don't Run All Background Jobs At A Lower Prior
 unsetopt hup                    # Don't Kill Jobs On Shell Exit.
 unsetopt check_jobs             # Don't Report On Jobs When Shell Exit.
 
-setopt correctall               # Turn On Corrections
+setopt correct                  # Correct mistyped commands (not every argument)
 setopt interactivecomments      # Needed for autocompletion
 
 # History
@@ -61,10 +61,12 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 export FZF_CTRL_T_COMMAND="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}'"
 alias f="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}' | fzf"
 alias vif='vim $(f)'
-bindkey '^[[A'  fzf-history-widget
+# (up-arrow -> fzf history is bound below, after `bindkey -v` resets the keymap.)
 
-# Add Visual Studio Code (code)
-export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
+# Add Visual Studio Code (code) — macOS only.
+if [[ "$OSTYPE" == darwin* ]]; then
+  export PATH="/Applications/Visual Studio Code.app/Contents/Resources/app/bin:$PATH"
+fi
 
 # n - node management
 export N_PREFIX=~/.n
@@ -116,3 +118,8 @@ _vi_cursor_shape() {
 }
 add-zle-hook-widget keymap-select _vi_cursor_shape
 add-zle-hook-widget line-init     _vi_cursor_shape
+
+# >>> harness-engineering setup.sh >>>
+export HARNESS_DIR="$HOME/src/misc/harness-engineering"
+alias cl='claude --permission-mode dontAsk --model "global.anthropic.claude-opus-4-8[1m]" --effort max'
+# <<< harness-engineering setup.sh <<<

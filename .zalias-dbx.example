@@ -1,0 +1,7 @@
+# Machine-local alias overrides — copy to ~/.zalias-dbx (untracked) per host.
+# Sourced by .zshenv after the shared .zalias. Use for box-specific paths,
+# project shortcuts, or anything you don't want committed to the repo.
+#
+# Example:
+# alias work='cd ~/src/server-wt'
+# export SOME_HOST_SPECIFIC_TOKEN=...

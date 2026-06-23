@@ -31,7 +31,7 @@ function gia() {
 }
 
 alias o='open'
-alias ls='eza'
+command -v eza >/dev/null && alias ls='eza'   # modern ls, only if installed
 
 alias cnvim='cd ~/.config/nvim; nvim'
 

@@ -99,6 +99,12 @@ if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
   PROFILE=/dev/null curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 fi
 
+echo "Installing Rust (rustup/cargo)..."
+# .zshenv sources $HOME/.cargo/env, so make sure it exists.
+if [[ ! -f "$HOME/.cargo/env" ]]; then
+  curl --proto '=https' --tlsv1.2 -fsSL https://sh.rustup.rs | sh -s -- -y --no-modify-path
+fi
+
 echo "Setting up TERM with xterm-256color-italic..."
 if [[ ! -f "$DIR/xterm-256color-italic.terminfo" ]]; then
   curl -fsSL \
@@ -110,6 +116,12 @@ tic "$DIR/xterm-256color-italic.terminfo"
 # macOS-only: disable font smoothing for crisper text in terminals.
 if [[ "$(uname)" == "Darwin" ]]; then
   defaults write -g AppleFontSmoothing -int 0
+fi
+
+# Lint this script (non-fatal) so regressions surface during setup.
+if command -v shellcheck >/dev/null 2>&1; then
+  echo "Linting install.sh with shellcheck..."
+  shellcheck -S warning "$DIR/install.sh" || echo "  (shellcheck reported warnings; not fatal)"
 fi
 
 echo
