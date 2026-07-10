@@ -15,6 +15,3 @@ keybind = alt+k=goto_split:up
 keybind = alt+arrow_up=goto_split:up
 keybind = alt+l=goto_split:right
 keybind = alt+arrow_right=goto_split:right
-
-keybind = alt+shift+h=previous_tab
-keybind = alt+shift+l=next_tab
