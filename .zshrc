@@ -39,6 +39,14 @@ source ~/Git/zsh-snap/znap.zsh  # Start Znap
 # `znap prompt` makes your prompt visible in less than 12ms!
 znap prompt sindresorhus/pure
 
+# vi mode. MUST precede zsh-autocomplete: the plugin binds whichever keymap is
+# aliased to `main` when it loads. Without this, a login shell (where $EDITOR is
+# not yet set) still has main=emacs, so the plugin's arrow bindings land in
+# `emacs` while zle later runs in `viins` -- and the arrows stop walking the
+# completion list.
+bindkey -v
+export KEYTIMEOUT=20            # 200ms Esc lag instead of the 400ms default
+
 # `znap source` automatically downloads and installs your plugins.
 znap source zdharma-continuum/fast-syntax-highlighting
 znap source marlonrichert/zsh-autocomplete
@@ -62,7 +70,7 @@ export FZF_DEFAULT_COMMAND='rg --files --no-ignore-vcs --hidden'
 export FZF_CTRL_T_COMMAND="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}'"
 alias f="rg --files --hidden --no-ignore-vcs -g '!{node_modules,.git}' | fzf"
 alias vif='vim $(f)'
-# (up-arrow -> fzf history is bound below, after `bindkey -v` resets the keymap.)
+# (up-arrow -> fzf history is bound below, after the plugins load.)
 
 # Add Visual Studio Code (code) — macOS only.
 if [[ "$OSTYPE" == darwin* ]]; then
@@ -85,12 +93,7 @@ export NVM_DIR="$HOME/.config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# vi mode
-# zsh already auto-selects vi mode from $EDITOR (nvim), but make it explicit.
-bindkey -v
-export KEYTIMEOUT=20            # 200ms Esc lag instead of the 400ms default
-
-# Re-assert custom insert-mode binds (bindkey -v reinitializes the main keymap).
+# Custom insert-mode binds (applied after plugins so they win).
 bindkey '^x'    create_completion          # zsh_codex
 bindkey '^[[A'  fzf-history-widget         # up arrow -> fzf history (normal cursor mode)
 # On Linux, /etc/zsh/zshrc installs a zle-line-init that emits terminfo[smkx],
@@ -107,6 +110,10 @@ bindkey '^r' history-incremental-search-backward
 # k/j search history in normal mode
 bindkey -M vicmd 'k' up-line-or-search
 bindkey -M vicmd 'j' down-line-or-search
+
+# Down in normal mode: the plugin gives vicmd plain down-history, which never
+# opens the completion list. Use the same widget main gets.
+bindkey -M vicmd '^[[B' down-line-or-select '^[OB' down-line-or-select
 
 # Cursor shape: block in normal mode, beam in insert mode.
 # add-zle-hook-widget appends rather than replacing the plugins' own hooks.
