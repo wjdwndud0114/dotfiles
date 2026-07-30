@@ -223,7 +223,10 @@ vim.lsp.config('ts_ls', {
     preferences = {
       includeCompletionsForModuleExports = true,
       includeCompletionsForImportStatements = true,
-      importModuleSpecifierPreference = "auto",
+      -- Left at TypeScript's default. "auto" was a no-op: the valid values are
+      -- shortest | project-relative | relative | non-relative, and "auto"
+      -- belongs to the separate importModuleSpecifierEnding option.
+      -- importModuleSpecifierPreference = "non-relative",
     },
     maxTsServerMemory = 12288
   },
