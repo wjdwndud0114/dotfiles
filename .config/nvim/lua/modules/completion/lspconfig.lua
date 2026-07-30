@@ -72,8 +72,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- Call the enhance_attach function
     enhance_attach(client, bufnr)
 
-    -- Special handling for ts_ls
-    if client.name == 'ts_ls' then
+    -- Special handling for the TypeScript servers
+    if client.name == 'ts_ls' or client.name == 'tsgo' then
       client.server_capabilities.documentFormattingProvider = false
       vim.keymap.set('n', '<leader>o', function()
         vim.lsp.buf.code_action({
@@ -143,11 +143,77 @@ vim.lsp.config('lua_ls', {
   capabilities = capabilities,
 })
 
--- Configure ts_ls
+local ts_filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx' }
+
+-- Resolve the TypeScript 7 (`tsgo`) binary, preferring a project-local copy so
+-- the server matches the TypeScript the project itself compiles with.
+local function tsgo_bin(root_dir)
+  if root_dir then
+    local project_bin = vim.fs.joinpath(root_dir, 'node_modules', '.bin', 'tsgo')
+    if vim.fn.executable(project_bin) == 1 then
+      return project_bin
+    end
+  end
+  local mason_bin = servers_root .. 'tsgo'
+  return vim.fn.executable(mason_bin) == 1 and mason_bin or nil
+end
+
+-- Configure tsgo (TypeScript 7). Unlike ts_ls, tsgo pulls its preferences from
+-- `settings` via workspace/configuration using VS Code's key names, so these
+-- are not interchangeable with ts_ls's init_options.
+-- Import style is deliberately left at the default here, to match ts_ls below.
+local tsgo_settings = {
+  suggest = {
+    autoImports = true,
+    includeCompletionsForImportStatements = true,
+  },
+}
+
+-- Reuse nvim-lspconfig's root_dir, which resolves the monorepo root and skips
+-- Deno files, and additionally skip when no tsgo binary can be found. Fall back
+-- to a plain lockfile lookup if lspconfig ever stops shipping lsp/tsgo.lua.
+local tsgo_root_dir = (vim.lsp.config['tsgo'] or {}).root_dir
+  or function(bufnr, on_dir)
+    on_dir(vim.fs.root(bufnr, { 'package-lock.json', 'yarn.lock', 'pnpm-lock.yaml', 'bun.lock', 'bun.lockb', '.git' })
+      or vim.fn.getcwd())
+  end
+
+vim.lsp.config('tsgo', {
+  -- nvim-lspconfig's default cmd relies on `tsgo` being on PATH; resolve
+  -- Mason's copy explicitly instead, as the other servers here do.
+  cmd = function(dispatchers, config)
+    local bin = tsgo_bin((config or {}).root_dir)
+    return vim.lsp.rpc.start({ bin, '--lsp', '--stdio' }, dispatchers)
+  end,
+  root_dir = function(bufnr, on_dir)
+    return tsgo_root_dir(bufnr, function(dir)
+      if tsgo_bin(dir) then
+        on_dir(dir)
+      end
+    end)
+  end,
+  filetypes = ts_filetypes,
+  capabilities = capabilities,
+  settings = {
+    typescript = tsgo_settings,
+    javascript = tsgo_settings,
+  },
+})
+
+-- Configure ts_ls, used only where TypeScript 7 is unavailable
 vim.lsp.config('ts_ls', {
   cmd = { servers_root .. 'typescript-language-server', '--stdio' },
-  filetypes = { 'javascript', 'javascriptreact', 'javascript.jsx', 'typescript', 'typescriptreact', 'typescript.tsx' },
-  root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+  filetypes = ts_filetypes,
+  -- Gate on tsgo rather than root_markers: mason-lspconfig auto-enables every
+  -- installed server, so without this both would attach and double up on
+  -- diagnostics. Not calling on_dir leaves the server unstarted.
+  root_dir = function(bufnr, on_dir)
+    local root = vim.fs.root(bufnr, { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' })
+    if tsgo_bin(root) then
+      return
+    end
+    on_dir(root)
+  end,
   flags = {
     debounce_text_changes = 150,
   },
@@ -225,6 +291,7 @@ vim.lsp.enable({
   'gopls',
   'rust_analyzer',
   'lua_ls',
+  'tsgo',
   'ts_ls',
   'pyright',
   'bashls',
