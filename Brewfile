@@ -18,6 +18,9 @@ brew "shellcheck"        # shell script linter
 
 # Terminals
 cask "cmux"              # AI-agent terminal with vertical tabs
+brew "herdr"             # agent multiplexer (herdr.dev)
+# Alacritty is NOT listed here on purpose — its cask fails Homebrew's Gatekeeper
+# check and is disabled on 2026-09-01. install.sh pulls the release DMG instead.
 
 # Fonts (homebrew/cask-fonts tap was deprecated — fonts now live in the main cask repo)
 cask "font-roboto-mono-nerd-font"
