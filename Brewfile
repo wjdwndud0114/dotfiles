@@ -17,7 +17,6 @@ brew "gh"                # GitHub CLI
 brew "shellcheck"        # shell script linter
 
 # Terminals
-cask "alacritty"         # GPU terminal
 cask "cmux"              # AI-agent terminal with vertical tabs
 brew "herdr"             # agent multiplexer (herdr.dev)
 # Alacritty is NOT listed here on purpose — its cask fails Homebrew's Gatekeeper
