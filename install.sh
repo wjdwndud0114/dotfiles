@@ -60,6 +60,41 @@ brew bundle --file="$DIR/Brewfile"
 # fzf shell integration (key bindings + completion -> ~/.fzf.zsh)
 "$(brew --prefix)/opt/fzf/install" --key-bindings --completion --no-update-rc
 
+# Alacritty is installed here rather than from the Brewfile: it ships
+# adhoc-signed and unnotarized, so its cask fails Homebrew's Gatekeeper check
+# and is scheduled for removal on 2026-09-01. Pulling the release DMG with
+# curl avoids that, and curl (unlike a browser) never sets
+# com.apple.quarantine, so Gatekeeper does not block the result either.
+#
+# Keep this at 0.15.0 or newer. Older builds report the release of Enter, Tab
+# and Backspace as the same bytes as the press when an application enables
+# kitty keyboard event reporting, which makes those keys fire twice in herdr.
+ALACRITTY_VERSION="0.17.0"
+if [[ "$(uname)" == "Darwin" ]]; then
+  echo "Installing Alacritty $ALACRITTY_VERSION..."
+  installed=""
+  if [[ -d /Applications/Alacritty.app ]]; then
+    installed="$(/usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" \
+      /Applications/Alacritty.app/Contents/Info.plist 2>/dev/null || true)"
+  fi
+  if [[ "$installed" == "$ALACRITTY_VERSION" ]]; then
+    echo "  already installed"
+  else
+    alacritty_tmp="$(mktemp -d)"
+    curl -fsSL -o "$alacritty_tmp/Alacritty.dmg" \
+      "https://github.com/alacritty/alacritty/releases/download/v$ALACRITTY_VERSION/Alacritty-v$ALACRITTY_VERSION.dmg"
+    mkdir -p "$alacritty_tmp/mnt"
+    hdiutil attach -readonly -nobrowse -mountpoint "$alacritty_tmp/mnt" \
+      "$alacritty_tmp/Alacritty.dmg" >/dev/null
+    rm -rf /Applications/Alacritty.app
+    cp -R "$alacritty_tmp/mnt/Alacritty.app" /Applications/Alacritty.app
+    xattr -cr /Applications/Alacritty.app 2>/dev/null || true
+    hdiutil detach "$alacritty_tmp/mnt" >/dev/null
+    rm -rf "$alacritty_tmp"
+    echo "  installed ${installed:-none} -> $ALACRITTY_VERSION"
+  fi
+fi
+
 echo "Installing tmux plugins..."
 # Plain list (not an associative array) so this runs on macOS's bash 3.2.
 # Each plugin's dir name is just the basename of its repo URL.
