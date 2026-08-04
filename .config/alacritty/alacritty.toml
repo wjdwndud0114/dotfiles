@@ -21,4 +21,9 @@ decorations = "full"
 
 [general]
 live_config_reload = true
-import = ["~/.config/alacritty/dracula.toml"]
+
+# Color scheme — `alatheme` switches this line; `alatheme` with no argument
+# opens a picker showing each theme's full palette. live_config_reload repaints
+# open windows on save. Most themes come from github.com/alacritty/alacritty-
+# theme; ember comes from github.com/ember-theme/alacritty.
+import = ["~/.config/alacritty/themes/dracula.toml"]

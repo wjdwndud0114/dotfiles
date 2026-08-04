@@ -1,0 +1,105 @@
+#compdef alatheme
+
+# Completes Alacritty color schemes, each shown with a swatch of its palette.
+#
+# The swatch must NOT be built from escape sequences embedded in the display
+# string: zsh counts every byte of a `\e[38;2;R;G;Bm` toward the match's display
+# width, so a 50-column row measures ~200 and the listing wraps or gets
+# truncated mid-escape (zsh-autocomplete truncates to its idea of the width and
+# strands a couple of blocks far right). Instead the display strings are plain
+# text and the color comes from the `list-colors` style, where zsh emits the
+# escapes itself and knows they occupy no columns. If the style is ignored for
+# any reason the list still renders correctly, just uncolored.
+
+local dir=${ALACRITTY_THEMES_DIR:-$HOME/.config/alacritty/themes}
+local f name pat fmt
+local -a themes displays colors reply expl
+
+for f in $dir/*.toml(N); themes+=${${f:t}:r}
+(( $#themes )) || return 1
+
+# Without the parser (a shell that never sourced ~/.zalias) fall back to plain
+# names rather than completing nothing.
+if (( ! $+functions[_alatheme_palette] )); then
+  _describe -t themes 'alacritty theme' themes
+  return
+fi
+
+integer width=0 i
+for name in $themes; (( $#name > width )) && width=$#name
+
+local blocks=''
+repeat 8 blocks+='██'
+
+# The cursor row is painted with `ma` alone: complist replaces a selected
+# match's own colors wholesale, so that row's swatch cannot survive whatever we
+# do here. The default is 7 — reverse video — which turns it into a glaring
+# white bar with the blocks drawn in the background color, i.e. invisible. A
+# muted background reads as a cursor without wrecking the row. Carries the (*)
+# group prefix for the same reason the patterns below do.
+colors+=( '(*)ma=48;5;238' )
+
+for name in $themes; do
+  _alatheme_palette $dir/$name.toml        # sets $reply
+  displays+="${(r:$width:)name}  $blocks Aa"
+
+  # Anchor each pattern on its own theme name: an unanchored pattern would
+  # match every row and paint them all in the first theme's colors. Each (██)
+  # is a backreference group, and the =fmt sections that follow apply to the
+  # groups in order, after one leading =fmt for the rest of the match.
+  #
+  # Exactly 9 groups, which is zsh's hard limit on (#b) backreferences — a
+  # tenth is silently dropped, so the bright colors stay out of the menu (the
+  # `alatheme` listing shows them, where escapes are free).
+  # The pattern must stay pure ASCII — match the blocks with ?? rather than
+  # writing █ literally. zsh tokenizes glob metacharacters into bytes 0x80-0x9F,
+  # and █ is e2 96 88, whose continuation bytes land inside that range: the
+  # untokenize half of the round trip rewrites 0x88 to "(" and 0x96 to ">",
+  # leaving a pattern that matches nothing. It corrupts the stored spec rather
+  # than a copy, so the first listing (compiled from the pristine string) is
+  # colored and every later one is not. The blocks are safe in the display
+  # string, which is never compiled as a pattern.
+  pat="=(#b)${name}[ ]#"
+  repeat 8 pat+='(??)'      # normal black..white, one ?? per block
+  pat+='[ ]#(Aa)*'
+
+  fmt="=48;2;${reply[1]};38;2;${reply[2]}"                    # name, on theme bg
+  for i in {3..10}; fmt+="=48;2;${reply[1]};38;2;${reply[i]}" # the 8 blocks
+  fmt+="=48;2;${reply[1]};38;2;${reply[2]}"                   # the Aa sample
+
+  # Lead with the (*) group qualifier. _setup passes entries that already name
+  # a group through untouched, and prefixes the rest with the tag's group name
+  # — so (*) sidesteps any mismatch between that name and the group compadd
+  # actually files these matches under.
+  colors+=( "(*)$pat$fmt" )
+done
+
+# Set at completion time rather than shell startup so adding a theme file is
+# picked up with no reload, and no shell pays the parse cost unless it completes
+# this command.
+zstyle ':completion:*:alatheme:*' list-colors "${colors[@]}"
+
+# Registering the patterns for this command alone colors only the render that
+# this function drives. Pressing down re-enters the completion system without
+# necessarily coming back through here, and every pass opens with `_setup
+# default` (_main_complete line ~114) — which, finding no list-colors for the
+# default tag, runs `unset ZLS_COLORS` and drops the palette. So register them
+# under the default tag as well: then any pass installs them, whether or not it
+# reaches this file, and the `old_list = keep` branch has a live value to
+# restore. The lookup happens before the context knows the command, so this
+# cannot be scoped to alatheme.
+#
+# Snapshot whatever list-colors was in effect before we ever touched it and keep
+# it in front of ours, so this stays additive — our patterns demand a theme name
+# followed by 16 block glyphs and match nothing else.
+if (( ! $+ALATHEME_BASE_COLORS )); then
+  typeset -ga ALATHEME_BASE_COLORS
+  zstyle -a ':completion::::default' list-colors ALATHEME_BASE_COLORS
+fi
+zstyle ':completion:*:default' list-colors "${ALATHEME_BASE_COLORS[@]}" "${colors[@]}"
+
+# Must go through _wanted, not a bare compadd: the list-colors style is only
+# ever read by _setup, which runs from _description — which _wanted calls. A
+# direct compadd lists the matches but never picks up any color at all.
+_wanted themes expl 'alacritty theme' \
+  compadd "$expl[@]" -l -d displays -a themes

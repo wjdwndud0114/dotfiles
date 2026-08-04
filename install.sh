@@ -36,6 +36,13 @@ for file in "$DIR"/.config/*; do
   link "$file" "$HOME/.config/$(basename "$file")"
 done
 
+# Link completions file by file: other tools drop their own into this dir
+# (it is on $fpath via .zshrc), so it cannot be a symlink to the repo.
+mkdir -p ~/.zsh/completions
+for file in "$DIR"/.zsh/completions/*; do
+  link "$file" "$HOME/.zsh/completions/$(basename "$file")"
+done
+
 # cmux also reads a Ghostty config from Application Support.
 CMUX_SUPPORT="$HOME/Library/Application Support/com.cmuxterm.app"
 if [[ -d "$CMUX_SUPPORT" ]]; then
