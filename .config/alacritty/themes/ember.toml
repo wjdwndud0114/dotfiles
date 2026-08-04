@@ -1,0 +1,36 @@
+# Ember — dark variant
+# Source: https://github.com/ember-theme/ember/blob/main/palette.json
+
+[colors.primary]
+background = "#1c1b19"
+foreground = "#d8d0c0"
+
+[colors.cursor]
+text = "#1c1b19"
+cursor = "#e08060"
+
+[colors.selection]
+text = "#d8d0c0"
+background = "#3e3c38"
+
+# Normal colors
+[colors.normal]
+black   = "#1c1b19"
+red     = "#e08060"
+green   = "#8a9868"
+yellow  = "#c8b468"
+blue    = "#7890a0"
+magenta = "#b07878"
+cyan    = "#80a090"
+white   = "#d8d0c0"
+
+# Bright colors (same as normal — Ember's muted philosophy)
+[colors.bright]
+black   = "#1c1b19"
+red     = "#e08060"
+green   = "#8a9868"
+yellow  = "#c8b468"
+blue    = "#7890a0"
+magenta = "#b07878"
+cyan    = "#80a090"
+white   = "#d8d0c0"

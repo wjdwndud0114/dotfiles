@@ -36,3 +36,227 @@ command -v eza >/dev/null && alias ls='eza'   # modern ls, only if installed
 alias cnvim='cd ~/.config/nvim; nvim'
 
 function cs() { cd "$@" && ls; }
+
+# Alacritty color schemes. Every theme is a toml in $ALACRITTY_THEMES_DIR; the
+# active one is whichever file alacritty.toml imports. Completion for `alatheme`
+# lives in ~/.zsh/completions/_alatheme and shares the parser below, so keep both
+# in this file's shell (.zshenv sources it everywhere).
+export ALACRITTY_THEMES_DIR="$HOME/.config/alacritty/themes"
+
+# Palette slots, in the order _alatheme_palette returns them.
+ALATHEME_SLOTS=(black red green yellow blue magenta cyan white)
+
+# _alatheme_palette FILE — parse a theme's toml into $reply, each entry an
+# "R;G;B" string ready to drop straight into an SGR escape:
+#   reply[1]      background
+#   reply[2]      foreground
+#   reply[3,10]   normal black..white
+#   reply[11,18]  bright black..white
+function _alatheme_palette() {
+  emulate -L zsh
+  local line section key hex
+  local -A col
+
+  # Parse the toml directly rather than shelling out; values are "#rrggbb" or
+  # "0xrrggbb" in either quote style, so drop the quotes and take what's left.
+  for line in ${(f)"$(<$1)"}; do
+    line=${line//[\"\']/}
+    # Capture the whole dotted table name, not just its first component:
+    # [colors.search.matches] must not be mistaken for a continuation of
+    # [colors.primary] and overwrite the background with its highlight color.
+    if [[ $line =~ '^\[([a-zA-Z0-9_.]+)\]' ]]; then
+      section=${match[1]#colors.}
+    elif [[ $line =~ '^[[:space:]]*([a-z_]+)[[:space:]]*=[[:space:]]*(0x|#)([0-9a-fA-F]{6})' ]]; then
+      col[${section}.${match[1]}]=${match[3]}
+    fi
+  done
+
+  local -a want out
+  want=(primary.background primary.foreground)
+  for key in $ALATHEME_SLOTS; want+=normal.$key
+  for key in $ALATHEME_SLOTS; want+=bright.$key
+
+  for key in $want; do
+    hex=${col[$key]}
+    # Themes may omit a whole section: fall bright back to normal, and anything
+    # still missing to the foreground, so every theme previews sensibly.
+    [[ -z $hex && $key == bright.* ]] && hex=${col[normal.${key#bright.}]}
+    [[ -z $hex ]] && hex=${col[primary.foreground]:-ffffff}
+    out+=("$(( 16#${hex[1,2]} ));$(( 16#${hex[3,4]} ));$(( 16#${hex[5,6]} ))")
+  done
+  typeset -ga reply=( "$out[@]" )
+}
+
+# _alatheme_swatch FILE — one-line preview in $REPLY: 16 color blocks and an
+# `Aa` sample on the theme's own background. This one embeds real escapes, which
+# is fine for terminal output but NOT for completion display strings — see
+# ~/.zsh/completions/_alatheme for why that path colors differently.
+function _alatheme_swatch() {
+  emulate -L zsh
+  local -a reply
+  _alatheme_palette $1
+
+  # Two statements, not one: a single `local a=.. b=$a` expands every word
+  # before assigning any, so $e would still be empty in $out.
+  # ${e} must stay braced too — bare $e[... reads as a subscript on the scalar.
+  local e=$'\e'
+  local out="${e}[48;2;${reply[1]}m "
+  integer i
+  for i in {3..18}; do
+    out+="${e}[38;2;${reply[i]}m██"
+    (( i == 10 )) && out+=" "     # gap between the normal and bright rows
+  done
+  # -g assigns to the caller's `local REPLY` instead of making its own.
+  typeset -g REPLY="$out ${e}[38;2;${reply[2]}mAa ${e}[0m"
+}
+
+# _alatheme_emit LINE — one panel line, padded to a solid block of the theme's
+# background. Reads $bg/$rs/$e/$width from _alatheme_table, its only caller:
+# a nested function would outlive the call and litter the global namespace.
+# Width has to be measured with the color escapes stripped out, or every line
+# would come up short by however many bytes of escape it happens to hold.
+function _alatheme_emit() {
+  local plain=${(S)1//$e\[[0-9;]##m/}
+  integer fill=$(( width - ${#plain} ))
+  (( fill < 0 )) && fill=0
+  print -r -- "${bg}${1}${(l:$fill:)}${rs}"
+}
+
+# _alatheme_table FILE NAME [WIDTH] — print a theme's full palette as a panel,
+# every line laid on the theme's own background so it reads like the terminal
+# will actually look. This is what the `alatheme` picker shows in its preview
+# pane, which is why it takes a width: fzf gives no room to wrap.
+function _alatheme_table() {
+  emulate -L zsh
+  setopt localoptions extendedglob
+  local -a reply
+  _alatheme_palette $1
+
+  local name=$2
+  integer width=${3:-58} i
+  local e=$'\e'
+  local bg="${e}[48;2;${reply[1]}m" rs="${e}[0m"
+  local fg="${e}[38;2;${reply[2]}m" dim="${e}[38;2;${reply[10]}m"
+
+  local hex row
+  _alatheme_emit ""
+  printf -v hex '#%02x%02x%02x' ${(s.;.)reply[2]}
+  _alatheme_emit " ${fg}${name}"
+  _alatheme_emit " ${dim}fg $hex"
+  printf -v hex '#%02x%02x%02x' ${(s.;.)reply[1]}
+  _alatheme_emit " ${dim}bg $hex"
+  _alatheme_emit ""
+
+  # Normal color N on the left, its bright counterpart on the right.
+  for i in {1..8}; do
+    # Zero-pad the indices: 8..15 are a digit wider than 0..7, which would
+    # otherwise shove the bright column one place right on half the rows.
+    row=" ${dim}|${(l:2::0:)$(( i - 1 ))}| ${e}[38;2;${reply[i + 2]}m${(r:8:)ALATHEME_SLOTS[i]} ██"
+    row+="   ${dim}|${(l:2::0:)$(( i + 7 ))}| ${e}[38;2;${reply[i + 10]}m${(r:8:)ALATHEME_SLOTS[i]} ██"
+    _alatheme_emit "$row"
+  done
+
+  _alatheme_emit ""
+  _alatheme_emit " ${fg}The quick brown fox jumps over"
+  _alatheme_emit " ${fg}the lazy dog. 0123456789"
+  _alatheme_emit ""
+}
+
+# alatheme [name] — with no argument, pick a theme in fzf with its full palette
+# in the preview pane; with a name, switch straight to it. Switching rewrites
+# alacritty.toml's import line; live_config_reload repaints open windows on
+# save. ~/.config/alacritty is a symlink to the dotfiles repo, so a switch shows
+# up in `git status` — commit it to make the theme the default.
+function alatheme() {
+  emulate -L zsh
+  setopt localoptions extendedglob
+
+  local cfg="$HOME/.config/alacritty/alacritty.toml" dir=$ALACRITTY_THEMES_DIR
+  local f name line current mark REPLY
+  local -a themes lines
+
+  # Hidden subcommand, invoked by the picker's preview pane as its own process.
+  # It reaches this function because .zshenv sources ~/.zalias for every zsh,
+  # interactive or not.
+  if [[ $1 == --preview ]]; then
+    _alatheme_table $dir/$2.toml $2 ${3:-58}
+    return
+  fi
+
+  for f in $dir/*.toml(N); themes+=${${f:t}:r}
+  if (( ! $#themes )); then
+    print -u2 "alatheme: no themes in $dir"
+    return 1
+  fi
+  if [[ ! -f $cfg ]]; then
+    print -u2 "alatheme: $cfg not found"
+    return 1
+  fi
+
+  # Quoting is load-bearing all the way through the rewrite below: an unquoted
+  # array expansion elides empty elements, which would strip every blank line
+  # out of alacritty.toml.
+  lines=( "${(@f)$(<$cfg)}" )
+  for line in "$lines[@]"; do
+    [[ $line == import[[:space:]]#=* ]] && current=${${line##*/}%%.toml*}
+  done
+
+  if (( ! $# )); then
+    if (( $+commands[fzf] )); then
+      # Enter applies the theme through execute-silent, which returns to the
+      # picker instead of exiting it — so themes can be tried one after another
+      # and live_config_reload repaints the terminal underneath each time.
+      # Quitting is therefore the only way out, left to fzf's own Esc and ^C so
+      # every key stays available for typing a query.
+      #
+      # SHELL is what fzf runs the bound commands with, and they need to be a
+      # zsh so ~/.zshenv defines alatheme for them.
+      print -rl -- $themes |
+        SHELL=$commands[zsh] fzf \
+          --prompt='alacritty theme> ' \
+          --header="enter applies · esc quits · opened on ${current:-none}" \
+          --layout=reverse --height='90%' --no-multi \
+          --preview='alatheme --preview {} 58' \
+          --preview-window='right,60,border-left' \
+          --bind='enter:execute-silent(alatheme {})' >/dev/null
+      return 0                         # every exit is a quit; Enter already applied
+    else
+      # No fzf: fall back to a one-line swatch per theme.
+      integer width=0
+      for name in $themes; (( $#name > width )) && width=$#name
+      for name in $themes; do
+        [[ $name == $current ]] && mark='*' || mark=' '
+        _alatheme_swatch $dir/$name.toml
+        print -r -- "$mark ${(r:$width:)name}  $REPLY"
+      done
+      return 0
+    fi
+  fi
+
+  if [[ -z ${themes[(r)$1]} ]]; then
+    print -u2 "alatheme: no theme '$1' (run alatheme with no args to list)"
+    return 1
+  fi
+
+  # Write the import back through ~ rather than the expanded path: the config
+  # is shared with machines whose $HOME differs, and alacritty expands ~ itself.
+  local portable=${dir/#$HOME/\~}
+
+  local -a out
+  integer changed=0
+  for line in "$lines[@]"; do
+    if [[ $line == import[[:space:]]#=* ]]; then
+      out+=("import = [\"$portable/$1.toml\"]")
+      changed=1
+    else
+      out+=("$line")
+    fi
+  done
+  if (( ! changed )); then
+    print -u2 "alatheme: no import line in $cfg"
+    return 1
+  fi
+  # Rewrite in place rather than via a temp file: no mode/ownership to restore.
+  print -rl -- "$out[@]" > $cfg
+  print -r -- "alacritty theme -> $1"
+}
