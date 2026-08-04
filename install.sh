@@ -139,6 +139,27 @@ git config --global delta.navigate true
 git config --global merge.conflictstyle diff3
 git config --global diff.colorMoved default
 
+# Delta's own colors are generated from the active alacritty theme by
+# `alatheme` (see .zalias) so diffs match the terminal instead of delta's
+# hardcoded hex. They go in their own file, included from ~/.gitconfig, rather
+# than into ~/.gitconfig directly: that file is not tracked in this repo and is
+# hand-edited, so keeping generated lines out of it leaves
+#   git config --global --unset include.path <path>
+# as a complete, one-command undo. Git ignores an include whose file is missing,
+# so nothing breaks before the first generation.
+DELTA_THEME_CONFIG="$HOME/.config/git/delta-theme.gitconfig"
+mkdir -p "$(dirname "$DELTA_THEME_CONFIG")"
+# --add, and only when absent: include.path is multi-valued, and a plain set
+# would fail or clobber unrelated includes.
+if ! git config --global --get-all include.path 2>/dev/null \
+    | grep -qxF "$DELTA_THEME_CONFIG"; then
+  git config --global --add include.path "$DELTA_THEME_CONFIG"
+fi
+# Seed it for whichever theme alacritty.toml already imports. .zshenv sources
+# .zalias for every zsh, so a non-interactive one has the generator.
+zsh -c '_alatheme_delta_config' \
+  || echo "  warning: could not generate $DELTA_THEME_CONFIG"
+
 echo "Installing nvm..."
 # Install into the same dir .zshrc sources ($NVM_DIR).
 export NVM_DIR="$HOME/.config/nvm"
