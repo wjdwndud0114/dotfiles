@@ -36,6 +36,13 @@ for file in "$DIR"/.config/*; do
   link "$file" "$HOME/.config/$(basename "$file")"
 done
 
+# Helper scripts. .zshenv points BROWSER at tty-open on Linux; it uses an
+# absolute path, so this does not rely on ~/.local/bin being on PATH.
+mkdir -p ~/.local/bin
+for file in "$DIR"/bin/*; do
+  link "$file" "$HOME/.local/bin/$(basename "$file")"
+done
+
 # Link completions file by file: other tools drop their own into this dir
 # (it is on $fpath via .zshrc), so it cannot be a symlink to the repo.
 mkdir -p ~/.zsh/completions

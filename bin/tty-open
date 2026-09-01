@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+#
+# $BROWSER for headless devboxes.
+#
+# Devboxes have no xdg-open, so the "open a browser" step in codex mcp login (and
+# anything else using the webbrowser crate) fails and prints a ~700 char OAuth URL
+# instead. That URL wraps across rows, and neither tmux nor herdr tells the outer
+# terminal that those rows are one logical line, so Alacritty's hint regex can only
+# anchor on the row starting with https:// and yields a truncated, useless link.
+#
+# So don't print a bare URL. Hand it over two ways that wrapping cannot break:
+#   OSC 8  - a hyperlink whose *visible* text is short; the URL rides in the escape
+#   OSC 52 - puts the URL on the Mac clipboard, to paste if clicking is awkward
+#
+# Written to /dev/tty, not stdout: callers may redirect stdout, but these escapes
+# only mean anything if they reach the terminal.
+set -euo pipefail
+
+url=${1:-}
+if [[ -z $url ]]; then
+  printf 'usage: %s <url>\n' "${0##*/}" >&2
+  exit 2
+fi
+
+if ! exec 3>/dev/tty; then
+  printf '%s: no controlling tty; cannot hand off %s\n' "${0##*/}" "$url" >&2
+  exit 1
+fi
+
+# tmux drops application OSC 52 unless set-clipboard is on; herdr re-emits it
+# itself and needs no setting. Warn rather than silently losing the copy.
+if [[ -n ${TMUX:-} ]] && [[ $(tmux show -gv set-clipboard 2>/dev/null) != on ]]; then
+  printf '%s: tmux set-clipboard is not "on"; clipboard copy will be dropped\n' \
+    "${0##*/}" >&2
+fi
+
+# Short label so the link survives any terminal width: scheme + host only.
+label=$(printf %s "$url" | sed -E 's#^([a-zA-Z][a-zA-Z0-9+.-]*://[^/]+).*#\1#')
+
+printf '\033]8;;%s\033\\\033[1;94m▶ open %s\033[0m\033]8;;\033\\  (shift+click)\n' \
+  "$url" "$label" >&3
+printf '\033]52;c;%s\007' "$(printf %s "$url" | base64 | tr -d '\n')" >&3
+printf '  URL also copied to your clipboard\n' >&3
